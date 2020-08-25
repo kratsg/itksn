@@ -22,4 +22,7 @@ extras_require["develop"] = sorted(
 )
 extras_require["complete"] = sorted(set(sum(extras_require.values(), [])))
 
-setup(extras_require=extras_require)
+setup(
+    extras_require=extras_require,
+    use_scm_version=lambda: {"local_scheme": lambda version: ""},
+)

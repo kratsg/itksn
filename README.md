@@ -61,4 +61,4 @@ pre-commit install
 
 ## Acknowledgements
 
-- [@mmtthefeickert](https://github.com/matthewfeickert)'s [heputilities](https://github.com/matthewfeickert/heputils) repository for a quick start
+- [@matthefeickert](https://github.com/matthewfeickert)'s [heputilities](https://github.com/matthewfeickert/heputils) repository for a quick start

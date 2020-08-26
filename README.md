@@ -62,3 +62,9 @@ pre-commit install
 ## Acknowledgements
 
 - [@matthefeickert](https://github.com/matthewfeickert)'s [heputilities](https://github.com/matthewfeickert/heputils) repository for a quick start
+
+
+## References
+
+- [Serial Number Specification for ITk pixel modules](https://cds.cern.ch/record/2728364)
+- [Proposal for numbering scheme in the ITk, ATU-SYS-AM-0001](https://edms.cern.ch/document/1773411/1)

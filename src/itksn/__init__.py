@@ -1,7 +1,7 @@
 from .version import __version__
-from .core import SerialNumberStruct
+from . import core
 
-parse = SerialNumberStruct.parse
+parse = core.SerialNumberStruct.parse
 
 __all__ = ["__version__", "parse"]
-del SerialNumberStruct
+del core

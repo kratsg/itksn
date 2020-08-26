@@ -14,3 +14,9 @@ def test_version(script_runner):
     assert ret.stderr == ""
     # make sure it took less than a second
     assert elapsed < 1.0
+
+
+def test_parse(script_runner):
+    command = "itksn parse 20Uxxyynnnnnnn"
+    ret = script_runner.run(*shlex.split(command))
+    assert ret.success

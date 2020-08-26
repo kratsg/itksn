@@ -11,7 +11,11 @@ class EnumStr(Enum):
 
 SerialNumberStruct = "SerialNumber" / Struct(
     "atlas_project" / EnumStr(Bytes(2), atlas_detector=b"20"),
-    "system_code" / EnumStr(Bytes(1), phaseII_upgrade=b"U",),
+    "system_code"
+    / EnumStr(
+        Bytes(1),
+        phaseII_upgrade=b"U",
+    ),
     "project_code"
     / EnumStr(
         Bytes(2),

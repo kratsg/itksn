@@ -1,4 +1,13 @@
-from construct import Enum, Struct, Bytes, EnumIntegerString, Switch, this, Const, Terminated
+from construct import (
+    Enum,
+    Struct,
+    Bytes,
+    EnumIntegerString,
+    Switch,
+    this,
+    Const,
+    Terminated,
+)
 
 
 class EnumStr(Enum):

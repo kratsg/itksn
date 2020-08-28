@@ -7,6 +7,56 @@
 
 Helper utility for parsing ITk Serial Numbers
 
+## Using
+
+From the command line, you can parse serial numbers. If there is an error in parsing, it will loudly complain (sometimes).
+
+```
+$ itksn parse 20UPGMC2291234
+Container:
+    atlas_project = (enum) atlas_detector b'20'
+    system_code = (enum) phaseII_upgrade b'U'
+    project_code = (enum) pixel_general b'PG'
+    subproject_code = (enum) Module_carrier b'MC'
+    identifier = Container:
+        module_type = (enum) Linear_triplet_module_carrier b'2'
+        module_version = (enum) Quad_v2p1 b'2'
+        manufacturer = b'9' (total 1)
+        number = b'1234' (total 4)
+
+$ itksn parse 20UPGR40012345
+Container:
+    atlas_project = (enum) atlas_detector b'20'
+    system_code = (enum) phaseII_upgrade b'U'
+    project_code = (enum) pixel_general b'PG'
+    subproject_code = (enum) Digital_quad_module b'R4'
+    identifier = Container:
+        FE_chip_version = (enum) RD53A b'0'
+        reserved = b'0' (total 1)
+        number = b'12345' (total 5)
+
+$ itksn parse 20UPGPD0012345
+Container:
+    atlas_project = (enum) atlas_detector b'20'
+    system_code = (enum) phaseII_upgrade b'U'
+    project_code = (enum) pixel_general b'PG'
+    subproject_code = (enum) Dual_PCB b'PD'
+    identifier = Container:
+        FE_chip_version = (enum) RD53A b'0'
+        reserved = b'0' (total 1)
+        number = b'12345' (total 5)
+
+$ itksn parse 20UPGFW2123456
+Container:
+    atlas_project = (enum) atlas_detector b'20'
+    system_code = (enum) phaseII_upgrade b'U'
+    project_code = (enum) pixel_general b'PG'
+    subproject_code = (enum) FE_chip_wafer b'FW'
+    identifier = Container:
+        batch_number = (enum) CROC b'2'
+        number = b'123456' (total 6)
+```
+
 ## Installation
 
 In a fresh virtual environment, you can install from `PyPI`:

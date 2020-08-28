@@ -1,4 +1,4 @@
-from construct import Enum, Struct, Bytes, EnumIntegerString, Switch, this, Const
+from construct import Enum, Struct, Bytes, EnumIntegerString, Switch, this, Const, Terminated
 
 
 class EnumStr(Enum):
@@ -198,4 +198,5 @@ SerialNumberStruct = "SerialNumber" / Struct(
         },
         default=Bytes(7),
     ),
+    Terminated,
 )

@@ -22,8 +22,8 @@
 [pypi-version]:             https://img.shields.io/pypi/v/itksn
 [rtd-badge]:                https://readthedocs.org/projects/itksn/badge/?version=latest
 [rtd-link]:                 https://itksn.readthedocs.io/en/latest/?badge=latest
-[coverage-badge]:           https://codecov.io/gh/kratsg/itksn/graph/badge.svg?branch=master
-[coverage-link]:            https://codecov.io/gh/kratsg/itksn?branch=master
+[coverage-badge]:           https://codecov.io/gh/kratsg/itksn/graph/badge.svg?branch=main
+[coverage-link]:            https://codecov.io/gh/kratsg/itksn?branch=main
 
 <!-- prettier-ignore-end -->
 
@@ -88,7 +88,7 @@ In a fresh virtual environment, you can install from `PyPI`:
 $ python -m pip install itksn
 ```
 
-or from the master branch of the GitHub repository:
+or from the main branch of the GitHub repository:
 
 ```
 $ python -m pip install "git+https://github.com/kratsg/itksn.git"

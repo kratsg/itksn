@@ -61,7 +61,7 @@ repos:
       - id: mypy
         files: src
         args: []
-        additional_dependencies: ["typer"]
+        additional_dependencies: ["typer", "construct-typing"]
 
   - repo: https://github.com/codespell-project/codespell
     rev: v2.2.2

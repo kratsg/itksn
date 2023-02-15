@@ -149,7 +149,7 @@ build-check = [
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = ["-ra", "--showlocals", "--strict-markers", "--strict-config"]
+addopts = ["-ra", "--showlocals", "--strict-markers", "--strict-config", "--cov=itksn", "--cov-report=term-missing", "--cov-config=.coveragerc", "--cov-report=xml", "--doctest-modules", "--doctest-glob='*.rst'"]
 xfail_strict = true
 filterwarnings = ["error"]
 log_cli_level = "INFO"

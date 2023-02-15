@@ -18,7 +18,7 @@ Helper utility for parsing ITk Serial Numbers
 | CI/CD | [![CI - Test][actions-badge]][actions-link] [![CI - Coverage][coverage-badge]][coverage-link] |
 | Docs | [![Docs][actions-badge-docs]][actions-link-docs] [![Zenodo][zenodo-badge]][zenodo-link] |
 | Package | [![PyPI - Downloads][pypi-downloads]][pypi-link] [![PyPI - Version][pypi-version]][pypi-link] [![PyPI platforms][pypi-platforms]][pypi-link] [![Conda-Forge][conda-badge]][conda-link] |
-| Meta | [![GitHub - Discussion][github-discussions-badge]][github-discussions-link] [![GitHub - Issue][github-issues-badge]][github-issues-link] [![License - Apache 2.0][license-badge]][license-link] |
+| Meta | [![GitHub - Discussion][github-discussions-badge]][github-discussions-link] [![GitHub - Issue][github-issues-badge]][github-issues-link] [![License - BSD 3.0][license-badge]][license-link] |
 
 [actions-badge]:            https://github.com/kratsg/itksn/workflows/CI/badge.svg
 [actions-link]:             https://github.com/kratsg/itksn/actions

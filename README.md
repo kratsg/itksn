@@ -13,6 +13,7 @@ Helper utility for parsing ITk Serial Numbers
 
 <!-- prettier-ignore-start -->
 
+| | |
 | --- | --- |
 | CI/CD | [![CI - Test][actions-badge]][actions-link] [![CI - Coverage][coverage-badge]][coverage-link] |
 | Docs | [![Docs][actions-badge-docs]][actions-link-docs] [![Zenodo][zenodo-badge]][zenodo-link] |

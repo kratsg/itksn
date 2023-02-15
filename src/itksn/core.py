@@ -12,7 +12,11 @@ from construct import (
 )
 
 
-class EnumStr(Enum):
+class EnumStr(Enum):  # pylint: disable=abstract-method
+    """
+    EnumStr class type for decoding strings correctly
+    """
+
     def _decode(self, obj, *_):
         try:
             return self.decmapping[obj]

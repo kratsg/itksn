@@ -51,7 +51,7 @@ docs = [
 
 [project.urls]
 Homepage = "https://github.com/kratsg/itksn"
-Documentation = "https://kratsg.github.io/itksn"
+Documentation = "https://kratsg.github.io/itksn/0.0/"
 Tracker = "https://github.com/kratsg/itksn/issues"
 Discussions = "https://github.com/kratsg/itksn/discussions"
 Changelog = "https://github.com/kratsg/itksn/releases"

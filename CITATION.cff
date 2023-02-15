@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "Please cite the following works when using this software."
+type: software
+authors:
+- family-names: "Stark"
+  given-names: "Giordon"
+  orcid: "https://orcid.org/0000-0001-6616-3433"
+  affiliation: "SCIPP, University of California, Santa Cruz"
+title: "itksn: v0.0.3"
+version: 0.0.3
+doi: 10.5281/zenodo.7644145
+repository-code: "https://github.com/kratsg/itksn/releases/tag/v0.0.3"
+url: "https://kratsg.github.io/itksn/0.0.3/"
+keywords:
+  - python
+  - physics
+  - construct
+  - parsing
+license: "BSD-3.0"
+abstract: |
+  itksn is a Serial Number parser (and builder) for the ATLAS ITk project.

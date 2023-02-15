@@ -40,6 +40,12 @@ src = "pyproject.toml"
 version_template = "{major}.{minor}"
 search = "/itksn/{current_version}/"
 
+[[file]]
+src = ".zenodo.json"
+
+[[file]]
+src = "CITATION.cff"
+
 [[field]]
 # the name of the field
 name = "candidate"

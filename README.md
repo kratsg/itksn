@@ -27,6 +27,7 @@ Helper utility for parsing ITk Serial Numbers
 [conda-link]:               https://github.com/conda-forge/itksn-feedstock
 [github-discussions-badge]: https://img.shields.io/static/v1?label=Discussions&message=Ask&color=blue&logo=github
 [github-discussions-link]:  https://github.com/kratsg/itksn/discussions
+[github-issues-link]:       https://github.com/kratsg/itksn/issues
 [pypi-link]:                https://pypi.org/project/itksn/
 [pypi-downloads]:           https://img.shields.io/pypi/dm/itksn.svg?color=blue&label=Downloads&logo=pypi&logoColor=gold
 [pypi-platforms]:           https://img.shields.io/pypi/pyversions/itksn
@@ -36,6 +37,8 @@ Helper utility for parsing ITk Serial Numbers
 [coverage-badge]:           https://codecov.io/gh/kratsg/itksn/graph/badge.svg?branch=main
 [coverage-link]:            https://codecov.io/gh/kratsg/itksn?branch=main
 [license-link]:             https://spdx.org/licenses/BSD-3-Clause.html
+[zenodo-badge]:             https://zenodo.org/badge/290293623.svg
+[zenodo-link]:              https://zenodo.org/badge/latestdoi/290293623
 
 <!-- prettier-ignore-end -->
 

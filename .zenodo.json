@@ -1,0 +1,23 @@
+{
+  "description": "ITk Serial Number parser",
+  "license": "BSD-3.0",
+  "title": "itksn: v0.0.3",
+  "version": "v0.0.3",
+  "upload_type": "software",
+  "creators": [
+    {
+      "affiliation": "SCIPP, University of California, Santa Cruz",
+      "name": "Giordon Stark",
+      "orcid": "0000-0001-6616-3433"
+    }
+  ],
+  "access_right": "open",
+  "keywords": ["python", "physics", "construct", "parsing"],
+  "related_identifiers": [
+    {
+      "scheme": "url",
+      "identifier": "https://github.com/kratsg/itksn/tree/v0.0.3",
+      "relation": "isSupplementTo"
+    }
+  ]
+}

@@ -122,10 +122,10 @@ Once the environment is activated, clone the repo from GitHub
 git clone git@github.com:kratsg/itksn.git
 ```
 
-and install all necessary packages for development
+and you can use hatch for running tests/development, e.g.
 
 ```
-python -m pip install --ignore-installed --upgrade -e .[complete]
+hatch run +py=3.7 dev:test
 ```
 
 (Optional) Then setup the Git pre-commit hooks by running

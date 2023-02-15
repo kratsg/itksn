@@ -5,7 +5,7 @@ import typer
 from itksn import __version__
 from itksn.core import SerialNumberStruct
 
-app = typer.Typer()
+app = typer.Typer(context_settings={"help_option_names": ["-h", "--help"]})
 
 
 @app.callback(invoke_without_command=True)

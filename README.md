@@ -24,6 +24,7 @@
 [rtd-link]:                 https://itksn.readthedocs.io/en/latest/?badge=latest
 [coverage-badge]:           https://codecov.io/gh/kratsg/itksn/graph/badge.svg?branch=main
 [coverage-link]:            https://codecov.io/gh/kratsg/itksn?branch=main
+[license-link]:             https://spdx.org/licenses/BSD-3-Clause.html
 
 <!-- prettier-ignore-end -->
 

@@ -1,2 +1,0 @@
-* [itksn](itksn/index.md)
-    * [core](itksn/core.md)

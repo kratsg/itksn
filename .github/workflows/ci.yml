@@ -1,43 +1,86 @@
 name: CI
 
 on:
-  push:
+  workflow_dispatch:
   pull_request:
-  # Run daily at 0:01 UTC
-  schedule:
-    - cron: "1 0 * * *"
+  push:
+    branches:
+      - master
+      - main
+      - develop
+  release:
+    types:
+      - published
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  test:
-    runs-on: ${{ matrix.os }}
+  pre-commit:
+    name: Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+      - uses: pre-commit/action@v3.0.0
+        with:
+          extra_args: --hook-stage manual --all-files
+      - name: Run PyLint
+        run: |
+          echo "::add-matcher::$GITHUB_WORKSPACE/.github/matchers/pylint.json"
+          pipx run hatch run lint
+
+  checks:
+    name: Check Python ${{ matrix.python-version }} on ${{ matrix.runs-on }}
+    runs-on: ${{ matrix.runs-on }}
+    needs: [pre-commit]
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest, macOS-latest]
-        python-version: [3.6, 3.7, 3.8]
+        python-version: ["3.7", "3.10"]
+        runs-on: [ubuntu-latest, macos-latest, windows-latest]
+
+        include:
+          - python-version: pypy3.8
+            runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip setuptools wheel
-          python -m pip install -q --no-cache-dir --use-feature=2020-resolver -e .[complete]
-          python -m pip list
-      - name: Check MANIFEST
-        if: matrix.python-version == 3.8 && matrix.os == 'ubuntu-latest'
-        run: |
-          check-manifest
-      - name: Test with pytest
-        run: |
-          python -m pytest -r sx
-      - name: Report coverage with Codecov
-        if:
-          github.event_name == 'push' && matrix.python-version == 3.8 &&
-          matrix.os == 'ubuntu-latest'
-        uses: codecov/codecov-action@v1
+
+      - name: Test package
+        run: pipx run hatch run +py=${{ matrix.python-version}} dev:test
+
+  dist:
+    name: Distribution build
+    runs-on: ubuntu-latest
+    needs: [pre-commit]
+
+    steps:
+      - uses: actions/checkout@v3
         with:
-          file: ./coverage.xml
-          flags: unittests
+          fetch-depth: 0
+
+      - name: Build sdist and wheel; and check products
+        run: pipx run hatch run build-check
+
+      - uses: actions/upload-artifact@v3
+        with:
+          path: dist
+
+      - uses: pypa/gh-action-pypi-publish@v1.6.4
+        if: github.event_name == 'release' && github.event.action == 'published'
+        with:
+          user: __token__
+          # Remember to generate this and set it in "GitHub Secrets"
+          password: ${{ secrets.pypi_password }}

@@ -1,5 +1,7 @@
 # itksn
 
+![itksn logo](assets/images/logo.svg){ align="left" width="300" role="img" }
+
 --8<-- "README.md:badges"
 
 ---

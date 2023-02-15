@@ -1,23 +1,34 @@
-# itksn
+# itksn v0.0.3
 
-[![Actions Status][actions-badge]][actions-link]
-[![Documentation Status][rtd-badge]][rtd-link]
-[![Code Coverage][coverage-badge]][coverage-link]
+Helper utility for parsing ITk Serial Numbers
 
-[![PyPI version][pypi-version]][pypi-link]
-[![Conda-Forge][conda-badge]][conda-link]
-[![PyPI platforms][pypi-platforms]][pypi-link]
+---
 
-[![GitHub Discussion][github-discussions-badge]][github-discussions-link]
+<!-- sync the following div with docs/index.md -->
+<div align="center">
+
+<img src="https://raw.githubusercontent.com/kratsg/itksn/main/docs/assets/images/logo.svg" alt="itksn logo" width="500" role="img">
+
+<!-- --8<-- [start:badges] -->
 
 <!-- prettier-ignore-start -->
+
+| --- | --- |
+| CI/CD | [![CI - Test][actions-badge]][actions-link] [![CI - Coverage][coverage-badge]][coverage-link] |
+| Docs | [![Docs][actions-badge-docs]][actions-link-docs] [![Zenodo][zenodo-badge]][zenodo-link] |
+| Package | [![PyPI - Downloads][pypi-downloads]][pypi-link] [![PyPI - Version][pypi-version]][pypi-link] [![PyPI platforms][pypi-platforms]][pypi-link] [![Conda-Forge][conda-badge]][conda-link] |
+| Meta | [![GitHub - Discussion][github-discussions-badge]][github-discussions-link] [![GitHub - Issue][github-issues-badge]][github-issues-link] [![License - Apache 2.0][license-badge]][license-link] |
+
 [actions-badge]:            https://github.com/kratsg/itksn/workflows/CI/badge.svg
 [actions-link]:             https://github.com/kratsg/itksn/actions
+[actions-badge-docs]:       https://github.com/kratsg/itksn/actions/workflows/docs.yml/badge.svg?branch=main
+[actions-link-docs]:        https://github.com/kratsg/itksn/actions/workflows/docs.yml?query=branch:main
 [conda-badge]:              https://img.shields.io/conda/vn/conda-forge/itksn
 [conda-link]:               https://github.com/conda-forge/itksn-feedstock
 [github-discussions-badge]: https://img.shields.io/static/v1?label=Discussions&message=Ask&color=blue&logo=github
 [github-discussions-link]:  https://github.com/kratsg/itksn/discussions
 [pypi-link]:                https://pypi.org/project/itksn/
+[pypi-downloads]:           https://img.shields.io/pypi/dm/itksn.svg?color=blue&label=Downloads&logo=pypi&logoColor=gold
 [pypi-platforms]:           https://img.shields.io/pypi/pyversions/itksn
 [pypi-version]:             https://img.shields.io/pypi/v/itksn
 [rtd-badge]:                https://readthedocs.org/projects/itksn/badge/?version=latest
@@ -28,7 +39,9 @@
 
 <!-- prettier-ignore-end -->
 
-Helper utility for parsing ITk Serial Numbers
+<!-- --8<-- [end:badges] -->
+
+</div>
 
 ## Using
 

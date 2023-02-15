@@ -57,7 +57,7 @@ Discussions = "https://github.com/kratsg/itksn/discussions"
 Changelog = "https://github.com/kratsg/itksn/releases"
 
 [project.scripts]
-itksn = "itksn.cli:cli"
+itksn = "itksn.cli:app"
 
 [tool.hatch.version]
 source = "vcs"

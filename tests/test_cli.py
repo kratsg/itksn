@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import shlex
-import itksn
 import time
+
+import itksn
 
 
 def test_version(script_runner):

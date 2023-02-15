@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import pytest
 from construct import Bytes
 from construct.core import TerminatedError
+
 import itksn
 from itksn.core import EnumStr
 

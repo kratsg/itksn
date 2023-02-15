@@ -1,17 +1,23 @@
+from __future__ import annotations
+
 from construct import (
-    Enum,
-    Struct,
     Bytes,
-    EnumIntegerString,
-    Switch,
-    this,
     Const,
+    Enum,
+    EnumIntegerString,
+    Struct,
+    Switch,
     Terminated,
+    this,
 )
 
 
-class EnumStr(Enum):
-    def _decode(self, obj, context, path):
+class EnumStr(Enum):  # pylint: disable=abstract-method
+    """
+    EnumStr class type for decoding strings correctly
+    """
+
+    def _decode(self, obj, *_):
         try:
             return self.decmapping[obj]
         except KeyError:

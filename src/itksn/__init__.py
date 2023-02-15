@@ -1,5 +1,7 @@
-from .version import __version__
-from . import core
+from __future__ import annotations
+
+from itksn import core
+from itksn._version import __version__
 
 parse = core.SerialNumberStruct.parse
 

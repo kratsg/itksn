@@ -1,0 +1,4 @@
+[SCIPP]: https://scipp.science.ucsc.edu/
+[discussion]: https://github.com/kratsg/itksn/discussions
+[issue]: https://github.com/kratsg/itksn/issues
+[itk.docs]: https://itk.docs.cern.ch/

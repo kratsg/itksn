@@ -1,4 +1,10 @@
 """The itksn command line interface."""
-from .cli import itksn as cli
+from __future__ import annotations
 
-__all__ = ["cli"]
+import logging
+
+from itksn.cli.main import app
+
+logging.basicConfig()
+
+__all__ = ("app",)

@@ -1,24 +1,224 @@
 [build-system]
-# Minimum requirements for the build system to execute.
-requires = ["wheel", "setuptools>=30.3.0", "attrs>=17.1", "setuptools_scm"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+[project]
+name = "itksn"
+authors = [
+  { name = "Giordon Stark", email = "kratsg@gmail.com" },
+]
+description = "ITk Serial Number parser"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+  "Development Status :: 1 - Planning",
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: BSD License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Scientific/Engineering",
+  "Typing :: Typed",
+]
+dynamic = ["version"]
+dependencies = [
+  "typing_extensions >=3.7; python_version<'3.8'",
+  "typer",
+  "construct>=2.10"
+]
 
-[tool.black]
-line-length = 88
-include = '\.pyi?$'
-exclude = '''
-/(
-    \.git
-  | .eggs
-  | build
-)/
-'''
+[project.optional-dependencies]
+test = [
+  "pytest >=6",
+  "pytest-cov >=3",
+]
+dev = [
+  "pytest >=6",
+  "pytest-cov >=3",
+]
+docs = [
+  "Sphinx>=4.0",
+  "myst_parser>=0.13",
+  "sphinx-book-theme>=0.1.0",
+  "sphinx_copybutton",
+]
 
-[tool.check-manifest]
-ignore = [
-    'tests/**',
-    '.*',
-    'pyproject.toml',
-    'pytest.ini',
-    'CODE_OF_CONDUCT.md',
+[project.urls]
+Homepage = "https://github.com/kratsg/itksn"
+Documentation = "https://kratsg.github.io/itksn"
+Tracker = "https://github.com/kratsg/itksn/issues"
+Discussions = "https://github.com/kratsg/itksn/discussions"
+Changelog = "https://github.com/kratsg/itksn/releases"
+
+[project.scripts]
+itksn = "itksn.cli:app"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.version.raw-options]
+local_scheme = "no-local-version"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/itksn/_version.py"
+
+[tool.hatch.envs.default]
+dependencies = [
+    "tbump>=6.7.0",
+    "pylint",
+    "build",
+    "twine",
+]
+
+[tool.hatch.envs.default.scripts]
+tag = "tbump {args}"
+lint = "pylint src"
+build = "python -m build"
+validate = "twine check dist/*"
+# https://github.com/linkchecker/linkchecker/issues/678
+build-check = [
+  "build",
+  "validate",
+]
+
+[tool.hatch.envs.dev]
+template = "dev"
+# pylint and pytest needs to be installed into package environment
+detached = false
+dependencies = [
+    "pytest >=6",
+    "pytest-cov>=2.8",
+    "pytest-console-scripts>=0.2",
+    "pytest-mock>=3.0",
+]
+
+[tool.hatch.envs.dev.scripts]
+test = "pytest -ra"
+
+[[tool.hatch.envs.dev.matrix]]
+python = ["3.7", "3.8", "3.9", "3.10", "3.11", "pypy3.8"]
+
+[tool.hatch.envs.docs]
+template = "docs"
+dependencies = [
+    "mkdocs>=1.4.0",
+    "mkdocs-material>=8.5.6",
+    # Plugins
+    "mkdocs-minify-plugin>=0.5.0",
+    "mkdocs-git-revision-date-localized-plugin>=1.1.0",
+    "mkdocstrings[python]>=0.18",
+    "mkdocs-redirects>=1.1.0",
+    "mkdocs-glightbox>=0.3.0",
+    # https://github.com/jimporter/mike/issues/82#issuecomment-1172913929
+    "mike @ https://github.com/jimporter/mike/archive/392d57b8bb9d14bcedf2451a0dc302709f8055eb.zip",
+    # Extensions
+    "mkdocs-click>=0.8.0",
+    "pymdown-extensions>=9.7.0",
+    # Necessary for syntax highlighting in code blocks
+    "pygments>=2.13.0",
+    # Validation
+    # https://github.com/linkchecker/linkchecker/pull/669#issuecomment-1267236287
+    "linkchecker @ git+https://github.com/linkchecker/linkchecker.git@d9265bb71c2054bf57b8c5734a4825d62505c779",
+    # auto-generation of docs
+    "mkdocs-gen-files>=0.4",
+    "mkdocs-literate-nav>=0.5.0",
+    "mkdocs-section-index>=0.3.4",
+]
+[tool.hatch.envs.docs.env-vars]
+MKDOCS_CONFIG = "mkdocs.yml"
+MKDOCS_BRANCH = "gh-pages"
+[tool.hatch.envs.docs.scripts]
+# --strict disabled for now, see https://github.com/timvink/mkdocs-git-revision-date-localized-plugin/issues/101
+build = "mkdocs build --config-file {env:MKDOCS_CONFIG} --clean {args}"
+#build = "mkdocs build --config-file {env:MKDOCS_CONFIG} --clean --strict {args}"
+serve = "mkdocs serve --config-file {env:MKDOCS_CONFIG} --dev-addr localhost:8000 {args}"
+ci-build = "mike deploy --config-file {env:MKDOCS_CONFIG} --branch {env:MKDOCS_BRANCH} --update-aliases {args}"
+deploy = "ci-build --push"
+validate = "linkchecker --config .linkcheckerrc site"
+# https://github.com/linkchecker/linkchecker/issues/678
+build-check = [
+  "build --no-directory-urls",
+  "validate",
+]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = ["-ra", "--showlocals", "--strict-markers", "--strict-config", "--cov=itksn", "--cov-report=term-missing", "--cov-config=.coveragerc", "--cov-report=xml", "--doctest-modules", "--doctest-glob='*.rst'"]
+xfail_strict = true
+filterwarnings = ["error"]
+log_cli_level = "INFO"
+testpaths = [
+  "tests",
+]
+
+
+[tool.mypy]
+files = "src"
+python_version = "3.7"
+warn_unused_configs = true
+strict = true
+show_error_codes = true
+enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
+warn_unreachable = true
+
+[[tool.mypy.overrides]]
+module = 'construct'
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ['itksn.core']
+ignore_errors = true
+
+[tool.ruff]
+select = [
+  "E", "F", "W", # flake8
+  "B",  "B904",  # flake8-bugbear
+  "I",           # isort
+  "ARG",         # flake8-unused-arguments
+  "C4",          # flake8-comprehensions
+  "EM",          # flake8-errmsg
+  "ICN",         # flake8-import-conventions
+  "ISC",         # flake8-implicit-str-concat
+  "PGH",         # pygrep-hooks
+  "PIE",         # flake8-pie
+  "PL",          # pylint
+  "PT",          # flake8-pytest-style
+  "PTH",         # flake8-use-pathlib
+  "RET",         # flake8-return
+  "RUF",         # Ruff-specific
+  "SIM",         # flake8-simplify
+  "T20",         # flake8-print
+  "UP",          # pyupgrade
+  "YTT",         # flake8-2020
+]
+extend-ignore = ["PLR", "E501"]
+target-version = "py37"
+typing-modules = ["itksn._compat.typing"]
+src = ["src"]
+unfixable = ["T20", "F841"]
+exclude = []
+isort.required-imports = ["from __future__ import annotations"]
+
+[tool.ruff.per-file-ignores]
+"tests/**" = ["T20"]
+"src/itksn/cli/main.py" = ["B008"]
+
+
+[tool.pylint]
+py-version = "3.7"
+ignore-paths= ["src/itksn/_version.py"]
+reports.output-format = "colorized"
+similarities.ignore-imports = "yes"
+messages_control.disable = [
+  "design",
+  "fixme",
+  "line-too-long",
+  "missing-module-docstring",
+  "wrong-import-position",
 ]

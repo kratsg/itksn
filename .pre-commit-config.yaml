@@ -56,6 +56,7 @@ repos:
       - id: mypy
         files: src
         args: []
+        additional_dependencies: ["click"]
 
   - repo: https://github.com/codespell-project/codespell
     rev: v2.2.2

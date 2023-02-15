@@ -1,17 +1,19 @@
+from __future__ import annotations
+
 from construct import (
-    Enum,
-    Struct,
     Bytes,
-    EnumIntegerString,
-    Switch,
-    this,
     Const,
+    Enum,
+    EnumIntegerString,
+    Struct,
+    Switch,
     Terminated,
+    this,
 )
 
 
 class EnumStr(Enum):
-    def _decode(self, obj, context, path):
+    def _decode(self, obj, *_):
         try:
             return self.decmapping[obj]
         except KeyError:

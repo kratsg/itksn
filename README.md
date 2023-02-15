@@ -34,7 +34,8 @@ Helper utility for parsing ITk Serial Numbers
 
 ## Using
 
-From the command line, you can parse serial numbers. If there is an error in parsing, it will loudly complain (sometimes).
+From the command line, you can parse serial numbers. If there is an error in
+parsing, it will loudly complain (sometimes).
 
 ```
 $ itksn parse 20UPGMC2291234
@@ -98,7 +99,9 @@ $ python -m pip install "git+https://github.com/kratsg/itksn.git"
 
 The above is actually cloning and installing directly from the Git repository.
 
-However, if you want to, you can of course also install it directly from the Git repository "locally" by first cloning the repo and then from the top level of it running
+However, if you want to, you can of course also install it directly from the Git
+repository "locally" by first cloning the repo and then from the top level of it
+running
 
 ```
 $ python -m pip install .
@@ -136,8 +139,9 @@ pre-commit install
 
 ## Acknowledgements
 
-- [@matthefeickert](https://github.com/matthewfeickert)'s [heputilities](https://github.com/matthewfeickert/heputils) repository for a quick start
-
+- [@matthefeickert](https://github.com/matthewfeickert)'s
+  [heputilities](https://github.com/matthewfeickert/heputils) repository for a
+  quick start
 
 ## References
 

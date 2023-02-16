@@ -28,7 +28,7 @@ classifiers = [
 ]
 dynamic = ["version"]
 dependencies = [
-  "typing_extensions >=3.7; python_version<'3.8'",
+  "typing_extensions >=3.7; python_version<'3.11'",
   "typer",
   "construct>=2.10"
 ]
@@ -166,14 +166,6 @@ strict = true
 show_error_codes = true
 enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
 warn_unreachable = true
-
-[[tool.mypy.overrides]]
-module = 'construct'
-ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = ['itksn.core']
-ignore_errors = true
 
 [tool.ruff]
 select = [

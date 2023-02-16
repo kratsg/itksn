@@ -10,9 +10,9 @@ from itksn.core import EnumStr
 
 def test_enumstr():
     myenum = EnumStr(Bytes(2), itsaa=b"aa", itsbb=b"bb", itsyy=b"yy")
-    assert myenum.parse(b"yy").intvalue == b"yy"
+    assert myenum.parse(b"yy").bytevalue == b"yy"
     assert myenum.parse(b"yy") == "itsyy"
-    assert myenum.parse(b"xx").intvalue == b"xx"
+    assert myenum.parse(b"xx").bytevalue == b"xx"
     assert myenum.parse(b"xx") == ""
 
 
@@ -21,7 +21,7 @@ def test_parse_example1():
     assert parsed.atlas_project == "atlas_detector"
     assert parsed.system_code == "phaseII_upgrade"
     assert parsed.project_code == ""
-    assert parsed.subproject_code == ""
+    assert parsed.subproject_code == "yy"
     assert parsed.identifier == b"nnnnnnn"
 
 

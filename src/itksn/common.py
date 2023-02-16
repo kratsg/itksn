@@ -19,11 +19,15 @@ if TYPE_CHECKING:
 
     TheAdapter = Adapter[bytes, bytes, "EnumByteString", str]
 else:
-    Context = "Context"
+    Context = "Context"  # pylint: disable=invalid-name
     TheAdapter = Adapter
 
 
 class EnumByteString(str):
+    """
+    Like EnumIntegerString but for Bytes.
+    """
+
     bytevalue: bytes
 
     def __repr__(self: Self) -> str:
@@ -34,6 +38,9 @@ class EnumByteString(str):
 
     @staticmethod
     def new(bytevalue: bytes, stringvalue: str) -> EnumByteString:
+        """
+        Create EnumByteString object as a class constructor
+        """
         ret = EnumByteString(stringvalue)
         ret.bytevalue = bytevalue
         return ret
@@ -75,14 +82,14 @@ class EnumStr(TheAdapter):
     def _emitparse(self, code):  # type: ignore[no-untyped-def]
         fname = f"factory_{code.allocateId()}"
         code.append(f"{fname} = {repr(self.decmapping)}")
-        return f"reuse(({self.subcon._compileparse(code)}), lambda x: {fname}.get(x, EnumInteger(x)))"  # type: ignore[attr-defined]
+        return f"reuse(({self.subcon._compileparse(code)}), lambda x: {fname}.get(x, EnumInteger(x)))"  # type: ignore[attr-defined]  # pylint: disable=protected-access
 
     def _emitbuild(self, code):  # type: ignore[no-untyped-def]
         fname = f"factory_{code.allocateId()}"
         code.append(f"{fname} = {repr(self.encmapping)}")
-        return f"reuse({fname}.get(obj, obj), lambda obj: ({self.subcon._compilebuild(code)}))"  # type: ignore[attr-defined]
+        return f"reuse({fname}.get(obj, obj), lambda obj: ({self.subcon._compilebuild(code)}))"  # type: ignore[attr-defined]  # pylint: disable=protected-access
 
     def _emitprimitivetype(self, ksy, _):  # type: ignore[no-untyped-def]
-        name = "enum_%s" % ksy.allocateId()
+        name = f"enum_{ksy.allocateId()}"
         ksy.enums[name] = self.ksymapping
         return name

@@ -172,8 +172,8 @@ module = 'construct'
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
-module = ['itksn.core']
-ignore_errors = true
+module = ['itksn.pixels', 'itksn.core']
+disable_error_code = ["arg-type"]
 
 [tool.ruff]
 select = [

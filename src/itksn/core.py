@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from construct import (
     Bytes,
+    PaddedString,
     Struct,
     Switch,
     Terminated,
@@ -39,7 +40,7 @@ SerialNumberStruct = "SerialNumber" / Struct(
             "outer_pixel_barrel": pixels.subproject_codes,
             "pixel_general": pixels.subproject_codes,
         },
-        default=Bytes(2),
+        default=PaddedString(2, "utf8"),
     ),
     "identifier"
     / Switch(

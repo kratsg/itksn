@@ -21,7 +21,7 @@ def test_parse_example1():
     assert parsed.atlas_project == "atlas_detector"
     assert parsed.system_code == "phaseII_upgrade"
     assert parsed.project_code == ""
-    assert parsed.subproject_code == ""
+    assert parsed.subproject_code == "yy"
     assert parsed.identifier == b"nnnnnnn"
 
 

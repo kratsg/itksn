@@ -1,10 +1,16 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from construct import (
-    Context,
     Enum,
     EnumIntegerString,
 )
+
+if TYPE_CHECKING:
+    from construct import Context
+else:
+    Context = None
 
 
 class EnumStr(Enum):  # type: ignore[type-arg]  # pylint: disable=abstract-method

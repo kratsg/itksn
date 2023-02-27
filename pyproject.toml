@@ -191,7 +191,7 @@ select = [
 ]
 extend-ignore = ["PLR", "E501"]
 target-version = "py37"
-typing-modules = ["itksn._compat.typing"]
+typing-modules = ["itksn.typing"]
 src = ["src"]
 unfixable = ["T20", "F841"]
 exclude = []

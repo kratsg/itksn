@@ -14,7 +14,7 @@ def test_version(script_runner):
     elapsed = end - start
     assert ret.success
     assert itksn.__version__ in ret.stdout
-    assert ret.stderr
+    assert not ret.stderr
     # make sure it took less than a second
     assert elapsed < 1.0
 

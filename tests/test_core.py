@@ -13,14 +13,14 @@ def test_enumstr():
     assert myenum.parse(b"yy").bytevalue == b"yy"
     assert myenum.parse(b"yy") == "itsyy"
     assert myenum.parse(b"xx").bytevalue == b"xx"
-    assert myenum.parse(b"xx") == ""
+    assert myenum.parse(b"xx")
 
 
 def test_parse_example1():
     parsed = itksn.parse(b"20Uxxyynnnnnnn")
     assert parsed.atlas_project == "atlas_detector"
     assert parsed.system_code == "phaseII_upgrade"
-    assert parsed.project_code == ""
+    assert parsed.project_code
     assert parsed.subproject_code == "yy"
     assert parsed.identifier == b"nnnnnnn"
 
@@ -30,7 +30,7 @@ def test_parse_example2():
     assert parsed.atlas_project == "atlas_detector"
     assert parsed.system_code == "phaseII_upgrade"
     assert parsed.project_code == "inner_pixel"
-    assert parsed.subproject_code == ""
+    assert parsed.subproject_code
     assert parsed.identifier == b"nnnnnnn"
 
 

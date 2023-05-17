@@ -81,12 +81,12 @@ class EnumStr(TheAdapter):
 
     def _emitparse(self, code):  # type: ignore[no-untyped-def]
         fname = f"factory_{code.allocateId()}"
-        code.append(f"{fname} = {repr(self.decmapping)}")
+        code.append(f"{fname} = {self.decmapping!r}")
         return f"reuse(({self.subcon._compileparse(code)}), lambda x: {fname}.get(x, EnumInteger(x)))"  # type: ignore[attr-defined]  # pylint: disable=protected-access
 
     def _emitbuild(self, code):  # type: ignore[no-untyped-def]
         fname = f"factory_{code.allocateId()}"
-        code.append(f"{fname} = {repr(self.encmapping)}")
+        code.append(f"{fname} = {self.encmapping!r}")
         return f"reuse({fname}.get(obj, obj), lambda obj: ({self.subcon._compilebuild(code)}))"  # type: ignore[attr-defined]  # pylint: disable=protected-access
 
     def _emitprimitivetype(self, ksy, _):  # type: ignore[no-untyped-def]

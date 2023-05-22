@@ -9,7 +9,7 @@ import itksn
 def test_version(script_runner):
     command = "itksn --version"
     start = time.time()
-    ret = script_runner.run(*shlex.split(command))
+    ret = script_runner.run(shlex.split(command))
     end = time.time()
     elapsed = end - start
     assert ret.success
@@ -21,5 +21,5 @@ def test_version(script_runner):
 
 def test_parse(script_runner):
     command = "itksn parse 20Uxxyynnnnnnn"
-    ret = script_runner.run(*shlex.split(command))
+    ret = script_runner.run(shlex.split(command))
     assert ret.success

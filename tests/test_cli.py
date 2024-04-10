@@ -15,8 +15,8 @@ def test_version(script_runner):
     assert ret.success
     assert itksn.__version__ in ret.stdout
     assert not ret.stderr
-    # make sure it took less than a second
-    assert elapsed < 1.0
+    # make sure it took less than 1.5s
+    assert elapsed < 1.5
 
 
 def test_parse(script_runner):

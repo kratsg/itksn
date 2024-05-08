@@ -23,7 +23,7 @@ fe_chip_wafer = Struct(
         Bytes(1),
         RD53A=b"0",
         ITkpix_v1=b"1",
-        CROC=b"2",
+        ITkpix_v2=b"2",
     ),
     "number" / Bytes(6),
 )

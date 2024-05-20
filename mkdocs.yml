@@ -46,6 +46,7 @@ nav:
   - Home:
       - About: index.md
       - Installation: install.md
+      - Examples: examples.md
       - Code Reference: reference/
   - CLI:
       - About: cli/about.md

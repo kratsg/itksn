@@ -162,5 +162,5 @@ pre-commit install
 
 ## References
 
-- [Serial Number Specification for ITk pixel modules](https://cds.cern.ch/record/2728364)
+- [Serial Number Specification for ITk pixels](https://edms.cern.ch/ui/#!master/navigator/document?D:100968451:100968451:subDocs)
 - [Proposal for numbering scheme in the ITk, ATU-SYS-AM-0001](https://edms.cern.ch/document/1773411/1)

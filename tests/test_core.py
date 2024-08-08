@@ -92,8 +92,8 @@ def test_parse_quad_module():
     parsed = itksn.parse(b"20UPIM12602173")
     assert parsed.atlas_project == "atlas_detector"
     assert parsed.system_code == "phaseII_upgrade"
-    assert parsed.project_code == "pixel_general"
-    assert parsed.subproject_code == "Module_carrier"
+    assert parsed.project_code == "inner_pixel"
+    assert parsed.subproject_code == "L1_quad_module"
     assert parsed.identifier.FE_chip_version == "ITkpix_v1p1"
     assert parsed.identifier.PCB_manufacturer == "Yamashita_Material"
     assert parsed.identifier.number == b"02173"

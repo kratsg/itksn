@@ -93,10 +93,10 @@ def test_parse_quad_module():
     assert parsed.atlas_project == "atlas_detector"
     assert parsed.system_code == "phaseII_upgrade"
     assert parsed.project_code == "pixel_general"
-    assert parsed.subproject_code == "Digital_quad_module"
-    assert parsed.identifier.FE_chip_version == "RD53A"
-    assert parsed.identifier.reserved == b"0"
-    assert parsed.identifier.number == b"12345"
+    assert parsed.subproject_code == "Module_carrier"
+    assert parsed.identifier.FE_chip_version == "ITkpix_v1p1"
+    assert parsed.identifier.PCB_manufacturer == "Yamashita_Material"
+    assert parsed.identifier.number == b"02173"
 
 
 def test_parse_module_carrier():
@@ -105,9 +105,10 @@ def test_parse_module_carrier():
     assert parsed.system_code == "phaseII_upgrade"
     assert parsed.project_code == "pixel_general"
     assert parsed.subproject_code == "Module_carrier"
-    assert parsed.identifier.FE_chip_version == "ITkpix_v1p1"
-    assert parsed.identifier.PCB_manufacturer == "Yamashita_Material"
-    assert parsed.identifier.number == b"02173"
+    assert parsed.identifier.module_type == "Linear_triplet_module_carrier"
+    assert parsed.identifier.module_version == "Quad_v2p1"
+    assert parsed.identifier.manufacturer == b"9"
+    assert parsed.identifier.number == b"1234"
 
 
 def test_parse_toomany():

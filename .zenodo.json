@@ -1,8 +1,8 @@
 {
   "description": "ITk Serial Number parser",
   "license": "BSD-3.0",
-  "title": "itksn: v0.1.1",
-  "version": "v0.1.1",
+  "title": "itksn: v0.2.0",
+  "version": "v0.2.0",
   "upload_type": "software",
   "creators": [
     {
@@ -16,7 +16,7 @@
   "related_identifiers": [
     {
       "scheme": "url",
-      "identifier": "https://github.com/kratsg/itksn/tree/v0.1.1",
+      "identifier": "https://github.com/kratsg/itksn/tree/v0.2.0",
       "relation": "isSupplementTo"
     }
   ]

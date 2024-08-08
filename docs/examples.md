@@ -19,5 +19,9 @@ serialNumber = SerialNumberStruct.build(
 assert serialNumber == b"20UPGFC0078039"  # (2)!
 ```
 
-1. One passes in the integer representation of the chip name which is treated as an integer in python, which we convert to a string and fill with leading zeros using `str.zfill` and then encode as bytes (for the underlying `construct` object to build out.
-2. The result of this is the serial number as bytes, not a string. One can decode as normal.
+1. One passes in the integer representation of the chip name which is treated as
+   an integer in python, which we convert to a string and fill with leading
+   zeros using `str.zfill` and then encode as bytes (for the underlying
+   `construct` object to build out.
+2. The result of this is the serial number as bytes, not a string. One can
+   decode as normal.

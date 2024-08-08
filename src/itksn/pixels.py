@@ -9,6 +9,18 @@ from construct import (
 
 from itksn.common import EnumStr
 
+pcb_manufacturer = EnumStr(
+    Bytes(1),
+    EPEC=b"1",
+    NCAB_100um=b"2",
+    ATLAFLEX=b"3",
+    SFCircuits=b"4",
+    PHOENIX=b"5",
+    Yamashita_Material=b"6",
+    NCAB_75um=b"7",
+    Tecnomec=b"8",
+)
+
 fe_chip_version = EnumStr(
     Bytes(1),
     RD53A=b"0",
@@ -65,13 +77,19 @@ bare_module = Struct(
 
 pcb = Struct(
     "FE_chip_version" / fe_chip_version,
+    "PCB_manufacturer" / pcb_manufacturer,
+    "number" / Bytes(5),
+)
+
+module_rd53a = Struct(
+    "FE_chip_version" / fe_chip_version,
     "reserved" / Const(b"0"),
     "number" / Bytes(5),
 )
 
 module = Struct(
     "FE_chip_version" / fe_chip_version,
-    "reserved" / Const(b"0"),
+    "PCB_manufacturer" / pcb_manufacturer,
     "number" / Bytes(5),
 )
 

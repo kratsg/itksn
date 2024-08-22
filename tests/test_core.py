@@ -12,26 +12,8 @@ def test_enumstr():
     myenum = EnumStr(Bytes(2), itsaa=b"aa", itsbb=b"bb", itsyy=b"yy")
     assert myenum.parse(b"yy").bytevalue == b"yy"
     assert myenum.parse(b"yy") == "itsyy"
-    assert myenum.parse(b"xx").bytevalue == b"xx"
-    assert not myenum.parse(b"xx")
-
-
-def test_parse_example1():
-    parsed = itksn.parse(b"20Uxxyynnnnnnn")
-    assert parsed.atlas_project == "atlas_detector"
-    assert parsed.system_code == "phaseII_upgrade"
-    assert not parsed.project_code
-    assert parsed.subproject_code == "yy"
-    assert parsed.identifier == b"nnnnnnn"
-
-
-def test_parse_example2():
-    parsed = itksn.parse(b"20UPIyynnnnnnn")
-    assert parsed.atlas_project == "atlas_detector"
-    assert parsed.system_code == "phaseII_upgrade"
-    assert parsed.project_code == "inner_pixel"
-    assert not parsed.subproject_code
-    assert parsed.identifier == b"nnnnnnn"
+    with pytest.raises(MappingError):
+        myenum.parse(b"xx")
 
 
 def test_parse_fe_wafer():

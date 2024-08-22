@@ -78,7 +78,7 @@ def test_parse_pcb():
 
 
 def test_parse_module():
-    parsed = itksn.parse(b"20UPGR40012345")
+    parsed = itksn.parse(b"20UPGR90012345")
     assert parsed.atlas_project == "atlas_detector"
     assert parsed.system_code == "phaseII_upgrade"
     assert parsed.project_code == "pixel_general"

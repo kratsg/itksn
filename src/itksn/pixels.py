@@ -261,7 +261,7 @@ identifiers = Switch(
         "Digital_triplet_L0_stave_module": module_rd53a,
         "Digital_triplet_L0_ring0_module": module_rd53a,
         "Digital_triplet_L0_ring0p5_module": module_rd53a,
-        "Digital_quad_module": module_rd53a,
+        "Digital_quad_module": module,
         "Digital_L1_quad_module": module_rd53a,
         "Dummy_triplet_L0_stave_module": module_rd53a,
         "Dummy_triplet_L0_ring0_module": module_rd53a,

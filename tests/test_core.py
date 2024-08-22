@@ -65,13 +65,13 @@ def test_parse_pcb():
 
 
 def test_parse_module():
-    parsed = itksn.parse(b"20UPGR90012345")
+    parsed = itksn.parse(b"20UPGR90112345")
     assert parsed.atlas_project == "atlas_detector"
     assert parsed.system_code == "phaseII_upgrade"
     assert parsed.project_code == "pixel_general"
     assert parsed.subproject_code == "Digital_quad_module"
     assert parsed.identifier.FE_chip_version == "RD53A"
-    assert parsed.identifier.reserved == b"0"
+    assert parsed.identifier.PCB_manufacturer == "EPEC"
     assert parsed.identifier.number == b"12345"
 
 

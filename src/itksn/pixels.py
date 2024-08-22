@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from construct import (
     Bytes,
-    Const,
     Error,
     Struct,
     Switch,
@@ -91,12 +90,6 @@ bare_module = Struct(
 pcb = Struct(
     "FE_chip_version" / fe_chip_version,
     "PCB_manufacturer" / pcb_manufacturer,
-    "number" / Bytes(5),
-)
-
-module_rd53a = Struct(
-    "FE_chip_version" / fe_chip_version,
-    "reserved" / Const(b"0"),
     "number" / Bytes(5),
 )
 
@@ -251,23 +244,23 @@ identifiers = Switch(
         "Dual_PCB": pcb,
         "PCB_test_coupon": pcb,
         "OB_wirebond_protection_roof": Error,
-        "Triplet_L0_stave_module": module_rd53a,
-        "Triplet_L0_Ring0_module": module_rd53a,
-        "Triplet_L0_Ring0p5_module": module_rd53a,
+        "Triplet_L0_stave_module": module,
+        "Triplet_L0_Ring0_module": module,
+        "Triplet_L0_Ring0p5_module": module,
         "L1_quad_module": module,
         "Outer_system_quad_module": module,
-        "Dual_chip_module": module_rd53a,
-        "Single_chip_module": module_rd53a,
-        "Digital_triplet_L0_stave_module": module_rd53a,
-        "Digital_triplet_L0_ring0_module": module_rd53a,
-        "Digital_triplet_L0_ring0p5_module": module_rd53a,
+        "Dual_chip_module": module,
+        "Single_chip_module": module,
+        "Digital_triplet_L0_stave_module": module,
+        "Digital_triplet_L0_ring0_module": module,
+        "Digital_triplet_L0_ring0p5_module": module,
         "Digital_quad_module": module,
-        "Digital_L1_quad_module": module_rd53a,
-        "Dummy_triplet_L0_stave_module": module_rd53a,
-        "Dummy_triplet_L0_ring0_module": module_rd53a,
-        "Dummy_triplet_L0_ring0p5_module": module_rd53a,
-        "Dummy_quad_module": module_rd53a,
-        "Dummy_L1_quad_module": module_rd53a,
+        "Digital_L1_quad_module": module,
+        "Dummy_triplet_L0_stave_module": module,
+        "Dummy_triplet_L0_ring0_module": module,
+        "Dummy_triplet_L0_ring0p5_module": module,
+        "Dummy_quad_module": module,
+        "Dummy_L1_quad_module": module,
         "Module_carrier": module_carrier,
     },
     default=Bytes(7),

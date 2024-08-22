@@ -36,9 +36,9 @@ SerialNumberStruct = "SerialNumber" / Struct(
     / Switch(
         this.project_code,
         {
-            "inner_pixel": pixels.subproject_codes,
-            "outer_pixel_barrel": pixels.subproject_codes,
-            "pixel_general": pixels.subproject_codes,
+            "inner_pixel": pixels.subproject_codes["PI"],
+            "outer_pixel_barrel": pixels.subproject_codes["PB"],
+            "pixel_general": pixels.subproject_codes["PG"],
         },
         default=PaddedString(2, "utf8"),
     ),

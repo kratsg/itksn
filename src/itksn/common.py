@@ -66,11 +66,12 @@ class EnumStr(TheAdapter):
             return self.decmapping[self.encmapping[name]]
         raise AttributeError
 
-    def _decode(self, obj: bytes, _: Context, __: str):  # type: ignore[no-untyped-def]
+    def _decode(self, obj: bytes, _: Context, path: str):  # type: ignore[no-untyped-def]
         try:
             return self.decmapping[obj]
-        except KeyError:
-            return EnumByteString.new(obj, "")
+        except KeyError as exc:
+            msg = f"parsing failed, no mapping for {obj!r}"
+            raise MappingError(msg, path=path) from exc
 
     def _encode(self, obj: str, _: Context, path: str):  # type: ignore[no-untyped-def]
         try:

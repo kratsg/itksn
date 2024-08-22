@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 from construct import Bytes
-from construct.core import TerminatedError
+from construct.core import MappingError, TerminatedError
 
 import itksn
 from itksn.core import EnumStr
@@ -42,6 +42,11 @@ def test_parse_fe_wafer():
     assert parsed.subproject_code == "FE_chip_wafer"
     assert parsed.identifier.batch_number == "ITkpix_v2"
     assert parsed.identifier.number == b"123456"
+
+
+def test_parse_fe_wafer_wrong_subproject():
+    with pytest.raises(MappingError):
+        itksn.parse(b"20UPIFW2123456")
 
 
 def test_parse_sensor():

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 from construct import Bytes
-from construct.core import MappingError, TerminatedError
+from construct.core import MappingError
 
 import itksn
 from itksn.core import EnumStr
@@ -54,7 +54,7 @@ def test_parse_sensor():
     assert parsed.atlas_project == "atlas_detector"
     assert parsed.system_code == "phaseII_upgrade"
     assert parsed.project_code == "pixel_general"
-    assert parsed.subproject_code == "Outer_pixel_sensor_wafer_thickness_150mum"
+    assert parsed.subproject_code == "Outer_pixel_sensor_wafer_150um_thickness"
     assert parsed.identifier.manufacturer == "V5"
     assert parsed.identifier.sensor_type == "Double"
     assert parsed.identifier.number == b"12345"
@@ -117,5 +117,5 @@ def test_parse_module_carrier():
 
 
 def test_parse_toomany():
-    with pytest.raises(TerminatedError):
-        itksn.parse(b"20Uxxyynnnnnnnmmmm")
+    with pytest.raises(MappingError):
+        itksn.parse(b"20UPGMC2291234999")

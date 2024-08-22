@@ -20,6 +20,6 @@ def test_version(script_runner):
 
 
 def test_parse(script_runner):
-    command = "itksn parse 20Uxxyynnnnnnn"
+    command = "itksn parse 20UPGR92101041"
     ret = script_runner.run(shlex.split(command))
     assert ret.success

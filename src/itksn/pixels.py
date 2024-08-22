@@ -3,6 +3,7 @@ from __future__ import annotations
 from construct import (
     Bytes,
     Const,
+    Error,
     Struct,
     Switch,
 )
@@ -42,20 +43,32 @@ fe_chip_wafer = Struct(
 
 sensor = Struct(
     "manufacturer"
-    / EnumStr(Bytes(1), V1=b"0", V2=b"1", V3=b"2", V4=b"3", V5=b"4", V6=b"5"),
+    / EnumStr(
+        Bytes(1),
+        V1_ADVACAM=b"0",
+        V2_HLL=b"1",
+        V3_FBK_planar=b"2",
+        V4_HPK=b"3",
+        V5_LFoundry=b"4",
+        V6_MICRON=b"5",
+        V7_CNM=b"6",
+        V8_FBK_3D=b"7",
+        V9_SINTEF=b"8",
+        Dummy=b"9",
+    ),
     "sensor_type"
     / EnumStr(
         Bytes(1),
-        Single_RD53A=b"0",
-        Single_ITkpix_v1_2=b"1",
-        Double=b"2",
+        RD53A_test_structure=b"0",
+        Single=b"1",
+        Halfmoon_preproduction_Double_MS=b"2",
         Quad=b"3",
-        Test_Structure_1=b"4",
-        Test_Structure_2=b"5",
-        Test_Structure_3=b"6",
-        Test_Structure_4=b"7",
-        Test_Structure_5=b"8",
-        Test_Structure_6=b"9",
+        Planar_diode_test_structure_1=b"4",
+        Strip_test_structure_2=b"5",
+        Mini_sensor_test_structure_3=b"6",
+        Interpixel_capacitance_test_structure_4=b"7",
+        Biasing_test_structure_5=b"8",
+        ThreeD_diode_test_structure_6=b"9",
     ),
     "number" / Bytes(5),
 )
@@ -154,26 +167,26 @@ subproject_codes = EnumStr(
     SixInch_bare_module_gel_pack=b"G6",  # PG
     Triplet_L0_Stave_PCB=b"PT",  # PI
     Triplet_L0_R0_PCB=b"P0",  # PI
-    Triplet_L0_R05_PCB=b"P5",  # PI
+    Triplet_L0_R0p5_PCB=b"P5",  # PI
     Quad_PCB=b"PQ",  # PG
     Dual_PCB=b"PD",  # PG
     PCB_test_coupon=b"PC",  # PG
     OB_wirebond_protection_roof=b"WP",  # PB
     Triplet_L0_stave_module=b"MS",  # PI
     Triplet_L0_Ring0_module=b"M0",  # PI
-    Triplet_L0_Ring05_module=b"M5",  # PI
+    Triplet_L0_Ring0p5_module=b"M5",  # PI
     L1_quad_module=b"M1",  # PI
     Outer_system_quad_module=b"M2",  # PG
     Dual_chip_module=b"R2",  # PG
     Single_chip_module=b"R0",  # PG
     Digital_triplet_L0_stave_module=b"R6",  # PI
     Digital_triplet_L0_ring0_module=b"R7",  # PI
-    Digital_triplet_L0_ring05_module=b"R8",  # PI
+    Digital_triplet_L0_ring0p5_module=b"R8",  # PI
     Digital_quad_module=b"R9",  # PG
     Digital_L1_quad_module=b"RB",  # PI
     Dummy_triplet_L0_stave_module=b"RT",  # PI
     Dummy_triplet_L0_ring0_module=b"RU",  # PI
-    Dummy_triplet_L0_ring05_module=b"RV",  # PI
+    Dummy_triplet_L0_ring0p5_module=b"RV",  # PI
     Dummy_quad_module=b"RQ",  # PG
     Dummy_L1_quad_module=b"RR",  # PG
     Module_carrier=b"MC",  # PG
@@ -183,40 +196,67 @@ identifiers = Switch(
     lambda ctx: ctx.subproject_code,
     {
         "FE_chip_wafer": fe_chip_wafer,
-        "Market_Survey_sensor_wafer": sensor,
-        "L0_inner_pixel_3D_sensor_wafer": sensor,
-        "L0_inner_pixel_planar_sensor_wafer": sensor,
-        "L1_inner_pixel_sensor_wafer_thickness_100mum": sensor,
-        "Outer_pixel_sensor_wafer_thickness_150mum": sensor,
-        "Dummy_sensor_wafer": sensor,
-        "Market_survey_sensor_tile": sensor,
-        "L0_inner_pixel_3D_sensor_tile": sensor,
-        "L0_inner_pixel_planar_sensor_tile": sensor,
+        "FE_chip": Error,
+        "Planar_sensor_wafer_100um_thickness": sensor,
+        "Planar_sensor_wafer_150um_thickness": sensor,
+        "ThreeD_sensor_wafer": sensor,
+        "L0_inner_pixel_3D_sensor_wafer_25x100um": sensor,
+        "L0_inner_pixel_3D_sensor_wafer_50x50um": sensor,
+        "L1_inner_pixel_sensor_wafer_100um_thickness": sensor,
+        "Outer_pixel_sensor_wafer_150um_thickness": sensor,
+        "Half_size_planar_sensor_tile_100um_thickness": sensor,
+        "Half_size_planar_sensor_tile_150um_thickness": sensor,
+        "Full_size_planar_sensor_tile_100um_thickness": sensor,
+        "Full_size_planar_sensor_tile_150um_thickness": sensor,
+        "Half_size_3D_sensor_tile_25x100um": sensor,
+        "Full_size_3D_sensor_tile_25x100um": sensor,
+        "Half_size_3D_sensor_tile_50x50um": sensor,
+        "Full_size_3D_sensor_tile_50x50um": sensor,
+        "L0_inner_pixel_3D_sensor_tile_25x100um": sensor,
+        "L0_inner_pixel_3D_sensor_tile_50x50um": sensor,
         "L1_inner_pixel_quad_sensor_tile": sensor,
         "Outer_pixel_quad_sensor_tile": sensor,
+        "Planar_Sensor_test_structure_100um_thickness": sensor,
+        "Planar_Sensor_test_structure_150um_thickness": sensor,
+        "ThreeD_Sensor_test_structure_25x100um": sensor,
+        "ThreeD_Sensor_test_structure_50x50um": sensor,
+        "Planar_Sensor_half_moon_100um_thickness": sensor,
+        "Planar_Sensor_half_moon_150um_thickness": sensor,
+        "ThreeD_Sensor_half_moon_25x100um": sensor,
+        "ThreeD_Sensor_half_moon_50x50um": sensor,
         "Single_bare_module": bare_module,
         "Dual_bare_module": bare_module,
         "Quad_bare_module": bare_module,
         "Digital_single_bare_module": bare_module,
         "Digital_quad_bare_module": bare_module,
-        "Dummy_single_bare_module": bare_module,
         "Dummy_quad_bare_module": bare_module,
+        "Dummy_single_bare_module": bare_module,
+        "FourInch_bare_module_gel_pack": Error,
+        "SixInch_bare_module_gel_pack": Error,
         "Triplet_L0_Stave_PCB": pcb,
         "Triplet_L0_R0_PCB": pcb,
         "Triplet_L0_R0p5_PCB": pcb,
         "Quad_PCB": pcb,
         "Dual_PCB": pcb,
         "PCB_test_coupon": pcb,
+        "OB_wirebond_protection_roof": Error,
         "Triplet_L0_stave_module": module_rd53a,
         "Triplet_L0_Ring0_module": module_rd53a,
         "Triplet_L0_Ring0p5_module": module_rd53a,
         "L1_quad_module": module,
         "Outer_system_quad_module": module,
         "Dual_chip_module": module_rd53a,
-        "Digital_triplet_module": module_rd53a,
+        "Single_chip_module": module_rd53a,
+        "Digital_triplet_L0_stave_module": module_rd53a,
+        "Digital_triplet_L0_ring0_module": module_rd53a,
+        "Digital_triplet_L0_ring0p5_module": module_rd53a,
         "Digital_quad_module": module_rd53a,
-        "Dummy_triplet_module": module_rd53a,
+        "Digital_L1_quad_module": module_rd53a,
+        "Dummy_triplet_L0_stave_module": module_rd53a,
+        "Dummy_triplet_L0_ring0_module": module_rd53a,
+        "Dummy_triplet_L0_ring0p5_module": module_rd53a,
         "Dummy_quad_module": module_rd53a,
+        "Dummy_L1_quad_module": module_rd53a,
         "Module_carrier": module_carrier,
     },
     default=Bytes(7),

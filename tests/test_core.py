@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 from construct import Bytes
-from construct.core import TerminatedError
+from construct.core import MappingError, TerminatedError
 
 import itksn
 from itksn.core import EnumStr
@@ -12,26 +12,8 @@ def test_enumstr():
     myenum = EnumStr(Bytes(2), itsaa=b"aa", itsbb=b"bb", itsyy=b"yy")
     assert myenum.parse(b"yy").bytevalue == b"yy"
     assert myenum.parse(b"yy") == "itsyy"
-    assert myenum.parse(b"xx").bytevalue == b"xx"
-    assert not myenum.parse(b"xx")
-
-
-def test_parse_example1():
-    parsed = itksn.parse(b"20Uxxyynnnnnnn")
-    assert parsed.atlas_project == "atlas_detector"
-    assert parsed.system_code == "phaseII_upgrade"
-    assert not parsed.project_code
-    assert parsed.subproject_code == "yy"
-    assert parsed.identifier == b"nnnnnnn"
-
-
-def test_parse_example2():
-    parsed = itksn.parse(b"20UPIyynnnnnnn")
-    assert parsed.atlas_project == "atlas_detector"
-    assert parsed.system_code == "phaseII_upgrade"
-    assert parsed.project_code == "inner_pixel"
-    assert not parsed.subproject_code
-    assert parsed.identifier == b"nnnnnnn"
+    with pytest.raises(MappingError):
+        myenum.parse(b"xx")
 
 
 def test_parse_fe_wafer():
@@ -44,14 +26,19 @@ def test_parse_fe_wafer():
     assert parsed.identifier.number == b"123456"
 
 
+def test_parse_fe_wafer_wrong_subproject():
+    with pytest.raises(MappingError):
+        itksn.parse(b"20UPIFW2123456")
+
+
 def test_parse_sensor():
     parsed = itksn.parse(b"20UPGW34212345")
     assert parsed.atlas_project == "atlas_detector"
     assert parsed.system_code == "phaseII_upgrade"
     assert parsed.project_code == "pixel_general"
-    assert parsed.subproject_code == "Outer_pixel_sensor_wafer_thickness_150mum"
-    assert parsed.identifier.manufacturer == "V5"
-    assert parsed.identifier.sensor_type == "Double"
+    assert parsed.subproject_code == "Outer_pixel_sensor_wafer_150um_thickness"
+    assert parsed.identifier.manufacturer == "V5_LFoundry"
+    assert parsed.identifier.sensor_type == "Halfmoon_preproduction_Double_MS"
     assert parsed.identifier.number == b"12345"
 
 
@@ -78,13 +65,13 @@ def test_parse_pcb():
 
 
 def test_parse_module():
-    parsed = itksn.parse(b"20UPGR90012345")
+    parsed = itksn.parse(b"20UPGR90112345")
     assert parsed.atlas_project == "atlas_detector"
     assert parsed.system_code == "phaseII_upgrade"
     assert parsed.project_code == "pixel_general"
     assert parsed.subproject_code == "Digital_quad_module"
     assert parsed.identifier.FE_chip_version == "RD53A"
-    assert parsed.identifier.reserved == b"0"
+    assert parsed.identifier.PCB_manufacturer == "EPEC"
     assert parsed.identifier.number == b"12345"
 
 
@@ -113,4 +100,15 @@ def test_parse_module_carrier():
 
 def test_parse_toomany():
     with pytest.raises(TerminatedError):
-        itksn.parse(b"20Uxxyynnnnnnnmmmm")
+        itksn.parse(b"20UPGMC2291234999")
+
+
+def test_parse_digital_quad_module():
+    parsed = itksn.parse(b"20UPGR92101041")
+    assert parsed.atlas_project == "atlas_detector"
+    assert parsed.system_code == "phaseII_upgrade"
+    assert parsed.project_code == "pixel_general"
+    assert parsed.subproject_code == "Digital_quad_module"
+    assert parsed.identifier.FE_chip_version == "ITkpix_v1p1"
+    assert parsed.identifier.PCB_manufacturer == "EPEC"
+    assert parsed.identifier.number == b"01041"

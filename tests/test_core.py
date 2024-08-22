@@ -38,7 +38,7 @@ def test_parse_sensor():
     assert parsed.project_code == "pixel_general"
     assert parsed.subproject_code == "Outer_pixel_sensor_wafer_150um_thickness"
     assert parsed.identifier.manufacturer == "V5_LFoundry"
-    assert parsed.identifier.sensor_type == "Double"
+    assert parsed.identifier.sensor_type == "Halfmoon_preproduction_Double_MS"
     assert parsed.identifier.number == b"12345"
 
 

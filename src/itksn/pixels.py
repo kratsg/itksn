@@ -11,7 +11,6 @@ from itksn.common import EnumStr
 
 pcb_manufacturer = EnumStr(
     Bytes(1),
-    Triplet=b"0",
     EPEC=b"1",
     NCAB_100um=b"2",
     ATLAFLEX=b"3",

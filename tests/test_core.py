@@ -112,3 +112,24 @@ def test_parse_digital_quad_module():
     assert parsed.identifier.FE_chip_version == "ITkpix_v1p1"
     assert parsed.identifier.PCB_manufacturer == "EPEC"
     assert parsed.identifier.number == b"01041"
+
+
+@pytest.mark.parametrize(
+    ("serial_number", "subproject_code", "assembly_site", "number"),
+    [
+        ("20UPIMS2002140", "Triplet_L0_stave_module", "Genova", b"2140"),
+        ("20UPIM52002140", "Triplet_L0_Ring0p5_module", "Genova", b"2140"),
+        ("20UPIM02202123", "Triplet_L0_Ring0_module", "Oslo", b"2123"),
+        ("20UPIMS2102148", "Triplet_L0_stave_module", "Barcelona", b"2148"),
+    ],
+    ids=["normal", "R05", "R0", "L0"],
+)
+def test_triplet_modules(serial_number, subproject_code, assembly_site, number):
+    parsed = itksn.parse(serial_number.encode())
+    assert parsed.atlas_project == "atlas_detector"
+    assert parsed.system_code == "phaseII_upgrade"
+    assert parsed.project_code == "inner_pixel"
+    assert parsed.subproject_code == subproject_code
+    assert parsed.identifier.assembly_site == assembly_site
+    assert parsed.identifier.not_used == b"0"
+    assert parsed.identifier.number == number

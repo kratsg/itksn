@@ -101,7 +101,7 @@ dependencies = [
 test = "pytest -ra"
 
 [[tool.hatch.envs.dev.matrix]]
-python = ["3.8", "3.9", "3.10", "3.11", "pypy3.8"]
+python = ["3.8", "3.9", "3.10", "3.11", "3.12", "pypy3.8"]
 
 [tool.hatch.envs.docs]
 template = "docs"
@@ -202,7 +202,7 @@ isort.required-imports = ["from __future__ import annotations"]
 # Uncomment if using a _compat.typing backport
 typing-modules = ["itksn.typing"]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "tests/**" = ["T20"]
 "src/itksn/cli/main.py" = ["B008"]
 

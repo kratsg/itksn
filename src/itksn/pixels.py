@@ -21,6 +21,15 @@ pcb_manufacturer = EnumStr(
     Tecnomec=b"8",
 )
 
+triplet_assembly_site = EnumStr(
+    Bytes(1),
+    Genova=b"0",
+    Barcelona=b"1",
+    Oslo=b"2",
+    Milano=b"3",
+    LBNL=b"4",
+)
+
 fe_chip_version = EnumStr(
     Bytes(1),
     RD53A=b"0",
@@ -98,6 +107,13 @@ module = Struct(
     "PCB_manufacturer" / pcb_manufacturer,
     "number" / Bytes(5),
 )
+triplet_module = Struct(
+    "FE_chip_version" / fe_chip_version,
+    "assembly_site" / triplet_assembly_site,
+    "not_used" / Bytes(1),
+    "number" / Bytes(4),
+)
+
 
 module_carrier = Struct(
     "module_type"
@@ -244,21 +260,21 @@ identifiers = Switch(
         "Dual_PCB": pcb,
         "PCB_test_coupon": pcb,
         "OB_wirebond_protection_roof": Error,
-        "Triplet_L0_stave_module": module,
-        "Triplet_L0_Ring0_module": module,
-        "Triplet_L0_Ring0p5_module": module,
+        "Triplet_L0_stave_module": triplet_module,
+        "Triplet_L0_Ring0_module": triplet_module,
+        "Triplet_L0_Ring0p5_module": triplet_module,
         "L1_quad_module": module,
         "Outer_system_quad_module": module,
         "Dual_chip_module": module,
         "Single_chip_module": module,
-        "Digital_triplet_L0_stave_module": module,
-        "Digital_triplet_L0_ring0_module": module,
-        "Digital_triplet_L0_ring0p5_module": module,
+        "Digital_triplet_L0_stave_module": triplet_module,
+        "Digital_triplet_L0_ring0_module": triplet_module,
+        "Digital_triplet_L0_ring0p5_module": triplet_module,
         "Digital_quad_module": module,
         "Digital_L1_quad_module": module,
-        "Dummy_triplet_L0_stave_module": module,
-        "Dummy_triplet_L0_ring0_module": module,
-        "Dummy_triplet_L0_ring0p5_module": module,
+        "Dummy_triplet_L0_stave_module": triplet_module,
+        "Dummy_triplet_L0_ring0_module": triplet_module,
+        "Dummy_triplet_L0_ring0p5_module": triplet_module,
         "Dummy_quad_module": module,
         "Dummy_L1_quad_module": module,
         "Module_carrier": module_carrier,

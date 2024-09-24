@@ -2,57 +2,46 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://kratsg.github.io/itksn/0.2/</loc>
-         <lastmod>2024-08-22</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-09-24</lastmod>
     </url>
     <url>
          <loc>https://kratsg.github.io/itksn/0.2/examples/</loc>
-         <lastmod>2024-08-22</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-09-24</lastmod>
     </url>
     <url>
          <loc>https://kratsg.github.io/itksn/0.2/install/</loc>
-         <lastmod>2024-08-22</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-09-24</lastmod>
     </url>
     <url>
          <loc>https://kratsg.github.io/itksn/0.2/cli/about/</loc>
-         <lastmod>2024-08-22</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-09-24</lastmod>
     </url>
     <url>
          <loc>https://kratsg.github.io/itksn/0.2/cli/reference/</loc>
-         <lastmod>2024-08-22</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-09-24</lastmod>
     </url>
     <url>
          <loc>https://kratsg.github.io/itksn/0.2/meta/authors/</loc>
-         <lastmod>2024-08-22</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-09-24</lastmod>
     </url>
     <url>
          <loc>https://kratsg.github.io/itksn/0.2/meta/faq/</loc>
-         <lastmod>2024-08-22</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-09-24</lastmod>
     </url>
     <url>
          <loc>https://kratsg.github.io/itksn/0.2/reference/itksn/</loc>
-         <lastmod>2024-08-22</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-09-24</lastmod>
     </url>
     <url>
          <loc>https://kratsg.github.io/itksn/0.2/reference/itksn/common/</loc>
-         <lastmod>2024-08-22</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-09-24</lastmod>
     </url>
     <url>
          <loc>https://kratsg.github.io/itksn/0.2/reference/itksn/core/</loc>
-         <lastmod>2024-08-22</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-09-24</lastmod>
     </url>
     <url>
          <loc>https://kratsg.github.io/itksn/0.2/reference/itksn/pixels/</loc>
-         <lastmod>2024-08-22</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-09-24</lastmod>
     </url>
 </urlset>

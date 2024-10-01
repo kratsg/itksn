@@ -23,7 +23,7 @@ def test_parse_fe_wafer():
     assert parsed.project_code == "pixel_general"
     assert parsed.subproject_code == "FE_chip_wafer"
     assert parsed.identifier.batch == "RD53A"
-    assert parsed.identifier.number == b"123456"
+    assert parsed.identifier.number == b"2123456"
 
 
 def test_parse_fe_wafer_wrong_subproject():

@@ -41,6 +41,7 @@ batch_number = EnumStr(
 fe_chip = Struct(
     "number" / Bytes(7),
     "batch" / Computed(lambda ctx: (int(ctx.number) & 0xF0000) >> 16),  # type: ignore[arg-type,return-value]
+    "batch_number" / Computed(lambda ctx: batch_number.parse(str(ctx.batch).encode())),  # type: ignore[arg-type,return-value]
     "wafer" / Computed(lambda ctx: (int(ctx.number) & 0x0FF00) >> 8),  # type: ignore[arg-type,return-value]
     "row" / Computed(lambda ctx: (int(ctx.number) & 0x000F0) >> 4),  # type: ignore[arg-type,return-value]
     "column" / Computed(lambda ctx: (int(ctx.number) & 0x0000F) >> 0),  # type: ignore[arg-type,return-value]

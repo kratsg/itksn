@@ -141,7 +141,7 @@ def test_fe_chip():
     assert parsed.system_code == "phaseII_upgrade"
     assert parsed.project_code == "pixel_general"
     assert parsed.subproject_code == "FE_chip"
-    assert parsed.batch == 15
-    assert parsed.wafer == 255
-    assert parsed.row == 15
-    assert parsed.column == 15
+    assert parsed.identifier.batch == 15
+    assert parsed.identifier.wafer == 255
+    assert parsed.identifier.row == 15
+    assert parsed.identifier.column == 15

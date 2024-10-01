@@ -22,7 +22,7 @@ def test_parse_fe_wafer():
     assert parsed.system_code == "phaseII_upgrade"
     assert parsed.project_code == "pixel_general"
     assert parsed.subproject_code == "FE_chip_wafer"
-    assert parsed.identifier.batch == "ITkpix_v2"
+    assert parsed.identifier.batch == "RD53A"
     assert parsed.identifier.number == b"123456"
 
 

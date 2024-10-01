@@ -133,3 +133,15 @@ def test_triplet_modules(serial_number, subproject_code, assembly_site, number):
     assert parsed.identifier.assembly_site == assembly_site
     assert parsed.identifier.not_used == b"0"
     assert parsed.identifier.number == number
+
+
+def test_fe_chip():
+    parsed = itksn.parse(b"20UPGFC1048575")
+    assert parsed.atlas_project == "atlas_detector"
+    assert parsed.system_code == "phaseII_upgrade"
+    assert parsed.project_code == "pixel_general"
+    assert parsed.subproject_code == "FE_chip"
+    assert parsed.batch == 15
+    assert parsed.wafer == 255
+    assert parsed.row == 15
+    assert parsed.column == 15

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from construct import (
     Bytes,
+    Computed,
     Error,
     Struct,
     Switch,
@@ -30,23 +31,27 @@ triplet_assembly_site = EnumStr(
     LBNL=b"4",
 )
 
+batch_number = EnumStr(
+    Bytes(1),
+    RD53A=b"0",
+    ITkpix_v1=b"1",
+    ITkpix_v2=b"2",
+)
+
+fe_chip = Struct(
+    "number" / Bytes(7),
+    "batch" / Computed(lambda ctx: (int(ctx.number) & 0xF0000) >> 16),  # type: ignore[arg-type,return-value]
+    "wafer" / Computed(lambda ctx: (int(ctx.number) & 0x0FF00) >> 8),  # type: ignore[arg-type,return-value]
+    "row" / Computed(lambda ctx: (int(ctx.number) & 0x000F0) >> 4),  # type: ignore[arg-type,return-value]
+    "column" / Computed(lambda ctx: (int(ctx.number) & 0x0000F) >> 0),  # type: ignore[arg-type,return-value]
+)
+
 fe_chip_version = EnumStr(
     Bytes(1),
     RD53A=b"0",
     ITkpix_v1=b"1",
     ITkpix_v1p1=b"2",
     ITkpix_v2=b"3",
-)
-
-fe_chip_wafer = Struct(
-    "batch_number"
-    / EnumStr(
-        Bytes(1),
-        RD53A=b"0",
-        ITkpix_v1=b"1",
-        ITkpix_v2=b"2",
-    ),
-    "number" / Bytes(6),
 )
 
 sensor = Struct(
@@ -215,8 +220,8 @@ subproject_codes = {
 identifiers = Switch(
     lambda ctx: ctx.subproject_code,
     {
-        "FE_chip_wafer": fe_chip_wafer,
-        "FE_chip": Error,
+        "FE_chip_wafer": fe_chip,
+        "FE_chip": fe_chip,
         "Planar_sensor_wafer_100um_thickness": sensor,
         "Planar_sensor_wafer_150um_thickness": sensor,
         "ThreeD_sensor_wafer": sensor,

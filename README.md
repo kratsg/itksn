@@ -100,6 +100,24 @@ Container:
         number = b'123456' (total 6)
 ```
 
+If you want to, for example, build the serial number for a front-end chip hex,
+you can do:
+
+```python
+import itksn
+
+number = str(0x20098).zfill(7).encode()
+obj = {
+    "atlas_project": "atlas_detector",
+    "system_code": "phaseII_upgrade",
+    "project_code": "pixel_general",
+    "subproject_code": "FE_chip",
+    "identifier": {"number": number},
+}
+
+itksn.core.SerialNumberStruct.build(obj)  # b'20UPGFC0131224'
+```
+
 ## Installation
 
 In a fresh virtual environment, you can install from `PyPI`:

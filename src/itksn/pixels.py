@@ -55,6 +55,18 @@ fe_chip_version = EnumStr(
     ITkpix_v2=b"3",
 )
 
+fe_chip_version_pcb = EnumStr(
+    Bytes(1),
+    RD53A=b"0",
+    Prototype_ITkpix_v1=b"1",
+    Pre_production_OS_ITkpix_v1=b"2",
+    Pre_production_IS_ITkpix_v1=b"3",
+    Production_OS_ITkpix_v2=b"4",
+    Production_IS_ITkpix_v2=b"5",
+    No_chip=b"9",
+)
+
+
 sensor = Struct(
     "manufacturer"
     / EnumStr(
@@ -103,7 +115,7 @@ bare_module = Struct(
 )
 
 pcb = Struct(
-    "FE_chip_version" / fe_chip_version,
+    "FE_chip_version" / fe_chip_version_pcb,
     "PCB_manufacturer" / pcb_manufacturer,
     "number" / Bytes(5),
 )

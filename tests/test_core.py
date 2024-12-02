@@ -145,3 +145,14 @@ def test_fe_chip():
     assert parsed.identifier.wafer == 255
     assert parsed.identifier.row == 15
     assert parsed.identifier.column == 15
+
+
+def test_is_capillary():
+    parsed = itksn.parse(b"20UPICP1299999")
+    assert parsed.atlas_project == "atlas_detector"
+    assert parsed.system_code == "phaseII_upgrade"
+    assert parsed.project_code == "inner_pixel"
+    assert parsed.subproject_code == "IS_capillary"
+    assert parsed.identifier.production_type == "Production"
+    assert parsed.identifier.type == "R01"
+    assert parsed.identifier.number == b"99999"

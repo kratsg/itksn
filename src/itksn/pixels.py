@@ -152,7 +152,74 @@ module_carrier = Struct(
     "number" / Bytes(4),
 )
 
+local_supports_production_type = EnumStr(
+    Bytes(1),
+    Pre_production=b"0",
+    Production=b"1",
+    Prototype=b"2",
+    All_types=b"3",
+)
+
+local_supports_flavor = EnumStr(
+    Bytes(1),
+    L0=b"0",
+    L1=b"1",
+    R01=b"2",
+    R0p5=b"3",
+    R1=b"4",
+)
+
+local_supports_longeron_flavor = EnumStr(
+    Bytes(1),
+    L0=b"0",
+    L1=b"1",
+    R01=b"2",
+    R0p5=b"3",
+    R1=b"4",
+    A_side=b"5",
+    C_side=b"6",
+)
+
+local_supports = Struct(
+    "layer" / Bytes(1),
+    "production_type" / local_supports_production_type,
+    "number" / Bytes(5),
+)
+
+local_supports_is = Struct(
+    "production_type" / local_supports_production_type,
+    "type" / local_supports_flavor,
+    "number" / Bytes(5),
+)
+
+local_supports_longeron = Struct(
+    "production_type" / local_supports_production_type,
+    "type" / local_supports_longeron_flavor,
+    "number" / Bytes(5),
+)
+
+local_supports_ihr = Struct(
+    "production_type" / local_supports_production_type,
+    "type" / local_supports_flavor,
+    "position"
+    / EnumStr(
+        Bytes(1),
+        Standard=b"1",
+        Last=b"2",
+    ),
+    "number" / Bytes(4),
+)
+
+loaded_local_supports_ob_module = Struct(
+    "production_type" / local_supports_production_type,
+    "PCB_manufacturer" / pcb_manufacturer,
+    "number" / Bytes(5),
+)
+
+local_supports_frame_box = Struct("type" / EnumStr(Bytes(1), Longeron=b"1", HR=b"2"))
+
 yy_identifiers = {
+    # pixel modules and subcomponents
     "FE_chip_wafer": ("FW", "PG"),
     "FE_chip": ("FC", "PG"),
     "Planar_sensor_wafer_100um_thickness": ("W6", "PI", "PG"),
@@ -216,6 +283,54 @@ yy_identifiers = {
     "Dummy_quad_module": ("RQ", "PG"),
     "Dummy_L1_quad_module": ("RR", "PG"),
     "Module_carrier": ("MC", "PG"),
+    # local supports
+    "IS_capillary": ("CP", "PI"),
+    "IS_end_tube": ("ET", "PI"),
+    "IS_cooling_tube": ("CA", "PI"),
+    "IS_bare_local_support_stave": ("SS", "PI"),
+    "IS_bare_local_support_ring": ("RS", "PI"),
+    "IS_ring_local_support_assembly_loaded_ring": ("RL", "PI"),
+    "IS_barrel_stave_assembly_loaded_stave": ("SL", "PI"),
+    "OB_Base_Block": ("BB", "PB"),
+    "OB_Cooling_Block": ("CB", "PB"),
+    "OB_TPG_Tile": ("GT", "PB"),
+    "OB_Local_Support_Inserts": ("IN", "PB"),
+    "OB_Gusset": ("RG", "PB"),
+    "OB_Truss": ("LT", "PB"),
+    "OB_Half_Ring_Shell": ("RS", "PB"),
+    "OB_End_of_longeron_Bracket_End_Gusset": ("EG", "PB"),
+    "OB_Pipe_Support": ("PS", "PB"),
+    "OB_Evaporator_Sleeves": ("ES", "PB"),
+    "OB_Cooling_Pipe_IHR": ("RP", "PB"),
+    "OB_Cooling_Pipe_Longeron": ("LP", "PB"),
+    "OB_Functional_Pipe_for_IHR": ("RE", "PB"),
+    "OB_Functional_Pipe_for_Longeron": ("LE", "PB"),
+    "OB_End_of_longeron_Support": ("EL", "PB"),
+    "OB_Bare_Module_Cell": ("BC", "PB"),
+    "OB_Functional_IHR": ("FR", "PB"),
+    "OB_Functional_Longeron": ("FL", "PB"),
+    "OB_Loaded_Module_Cell": ("LC", "PB"),
+    "OB_Loaded_IHR": ("LR", "PB"),
+    "OB_Loaded_Longeron": ("LL", "PB"),
+    "OB_IHR_Handling_Frame": ("HR", "PB"),
+    "OB_Longeron_Handling_Frame": ("HL", "PB"),
+    "OB_Bare_Cell_Transport_Box": ("TB", "PB"),
+    "OEC_Trapezoids": ("TZ", "PE"),
+    "OEC_Electrical break": ("EB", "PE"),
+    "OEC_Inner_Rim_Insert": ("II", "PE"),
+    "OEC_Outer_Rim_mounting_lugs": ("ML", "PE"),
+    "OEC_Inner_Rim_Closeout": ("IC", "PE"),
+    "OEC_Outer_Rim_Closeout": ("OC", "PE"),
+    "OEC_Pipe_Closeout_support_closeout": ("SC", "PE"),
+    "OEC_Half_Sandwich": ("HS", "PE"),
+    "OEC_Evaporator": ("EV", "PE"),
+    "OEC_Bare_half_ring_assembly_Bare_support": ("BH", "PE"),
+    "OEC_Loaded_local_support_loaded_support": ("LS", "PE"),
+    "OEC_Handling_frame_support_frame": ("SF", "PE"),
+    "OEC_Transport/storage_box_support_box": ("SB", "PE"),
+    "Local_support_handling_frame_box": ("LB", "PE", "PI", "PB"),
+    "High_voltage_group": ("VG", "PE", "PI", "PB"),
+    "Serial_powering_scheme": ("SP", "PE", "PI", "PB"),
 }
 
 subproject_codes = {
@@ -227,7 +342,7 @@ subproject_codes = {
             if subproject_code in allowed_subprojects
         },
     )
-    for subproject_code in ["PI", "PG", "PB"]
+    for subproject_code in ["PI", "PG", "PB", "PE"]
 }
 
 identifiers = Switch(
@@ -296,6 +411,54 @@ identifiers = Switch(
         "Dummy_quad_module": module,
         "Dummy_L1_quad_module": module,
         "Module_carrier": module_carrier,
+        # local supports
+        "IS_capillary": local_supports_is,
+        "IS_end_tube": local_supports_is,
+        "IS_cooling_tube": local_supports_is,
+        "IS_bare_local_support_stave": local_supports_is,
+        "IS_bare_local_support_ring": local_supports_is,
+        "IS_ring_local_support_assembly_loaded_ring": local_supports,
+        "IS_barrel_stave_assembly_loaded_stave": local_supports,
+        "OB_Base_Block": local_supports,
+        "OB_Cooling_Block": local_supports,
+        "OB_TPG_Tile": local_supports,
+        "OB_Local_Support_Inserts": local_supports,
+        "OB_Gusset": local_supports,
+        "OB_Truss": local_supports,
+        "OB_Half_Ring_Shell": local_supports,
+        "OB_End_of_longeron_Bracket_End_Gusset": local_supports,
+        "OB_Pipe_Support": local_supports,
+        "OB_Evaporator_Sleeves": local_supports,
+        "OB_Cooling_Pipe_IHR": local_supports,
+        "OB_Cooling_Pipe_Longeron": local_supports,
+        "OB_Functional_Pipe_for_IHR": local_supports,
+        "OB_Functional_Pipe_for_Longeron": local_supports,
+        "OB_End_of_longeron_Support": local_supports,
+        "OB_Bare_Module_Cell": local_supports,
+        "OB_Functional_IHR": local_supports_ihr,
+        "OB_Functional_Longeron": local_supports_longeron,
+        "OB_Loaded_Module_Cell": loaded_local_supports_ob_module,
+        "OB_Loaded_IHR": local_supports,
+        "OB_Loaded_Longeron": local_supports,
+        "OB_IHR_Handling_Frame": local_supports,
+        "OB_Longeron_Handling_Frame": local_supports,
+        "OB_Bare_Cell_Transport_Box": local_supports,
+        "OEC_Trapezoids": local_supports,
+        "OEC_Electrical break": local_supports,
+        "OEC_Inner_Rim_Insert": local_supports,
+        "OEC_Outer_Rim_mounting_lugs": local_supports,
+        "OEC_Inner_Rim_Closeout": local_supports,
+        "OEC_Outer_Rim_Closeout": local_supports,
+        "OEC_Pipe_Closeout_support_closeout": local_supports,
+        "OEC_Half_Sandwich": local_supports,
+        "OEC_Evaporator": local_supports,
+        "OEC_Bare_half_ring_assembly_Bare_support": local_supports,
+        "OEC_Loaded_local_support_loaded_support": local_supports,
+        "OEC_Handling_frame_support_frame": local_supports,
+        "OEC_Transport/storage_box_support_box": local_supports,
+        "Local_support_handling_frame_box": local_supports_frame_box,
+        "High_voltage_group": local_supports,
+        "Serial_powering_scheme": local_supports,
     },
     default=Bytes(7),
 )

@@ -466,8 +466,8 @@ ob_type1_data = Struct(
 ob_type1 = Switch(
     lambda ctx: ctx.component_code,
     {
-        "Type_1_Power_DCS_line": ob_type1_power,
-        "Type_1_Data_link": ob_type1_data,
+        "Power_DCS_link": ob_type1_power,
+        "Data_link": ob_type1_data,
     },
 )
 
@@ -516,6 +516,18 @@ oe_type0 = Struct(
     "number" / Bytes(4),
 )
 
+oe_type1 = Struct(
+    "flavor" / Bytes(1),
+    "reserved" / Const(b"0"),
+    "length"
+    / EnumStr(
+        Bytes(1),
+        _50cm=b"0",
+        _250cm=b"9",
+    ),
+    "number" / Bytes(4),
+)
+
 type0 = Switch(
     lambda ctx: ctx.subproject_code,
     {
@@ -534,6 +546,46 @@ type1 = Switch(
         "pixel_general": Error,
         "pixel_endcaps": Error,
     },
+)
+
+type01 = Error  # FIXME
+
+type2 = Struct(
+    "flavor"
+    / Switch(
+        lambda ctx: ctx._.component_code,
+        {
+            "Type_2_power_cable": EnumStr(Bytes(1), normal=b"1", abnormal=b"2"),
+            "Type_2_optobox_cable": Const(b"0"),
+            "PP2_box": EnumStr(
+                Bytes(1),
+                F1=b"1",
+                F2=b"2",
+                F3=b"3",
+                F4=b"4",
+                F5=b"5",
+                F6=b"6",
+                F7=b"7",
+                F8=b"8",
+            ),
+        },
+    ),
+    "number" / Bytes(6),
+)
+
+type3 = Struct(
+    "flavor" / Const(b"0"),
+    "numbers" / Bytes(6),
+)
+
+type4 = Struct(
+    "flavor"
+    / EnumStr(
+        Bytes(1),
+        Pre_production_non_rad_hard=b"0",
+        Pre_production_rad_hard=b"1",
+        Production=b"2",
+    )
 )
 
 yy_identifiers = {
@@ -675,12 +727,12 @@ yy_identifiers = {
     "Pigtail_panel": ("PL", "PB"),
     "PP0": ("P0", "PI"),
     "Finger": ("FI", "PI"),
-    "Type_1_Data_link ": ("D1", "PI", "PB", "PE"),
-    "Type_1_Power_DCS_line": ("P1", "PI", "PB", "PE"),
-    "Type_1_Environmental_link": ("E1", "PI", "PB", "PE"),
+    "Data_link ": ("D1", "PI", "PB", "PE"),
+    "Power_DCS_link": ("P1", "PI", "PB", "PE"),
+    "Environmental_link": ("E1", "PI", "PB", "PE"),
     "PP1_connector": ("1P", "PI", "PB", "PE"),
     "PP1_connector_pieces_segments": ("CS", "PI", "PB", "PE"),
-    "Type_1_strain_relief": ("SR", "PB"),
+    "strain_relief": ("SR", "PB"),
     "Type_2_power_cable": ("P2", "PI", "PB", "PE"),
     "Type_2_optobox_cable": ("20", "PI", "PB", "PE"),
     "PP2_box": ("2P", "PG"),
@@ -820,7 +872,7 @@ identifiers = Switch(
         "Serial_powering_scheme": local_supports,
         # services
         "Optoboard": optoboard,
-        "Optoboard_termination_board": optoboard_termination,
+        "Optoboard_termination_board": optoboard_termination,  # FIXME: OB Type-1 Termination Board???
         "Optobox": optobox,
         "Optobox_powerbox": optobox,
         "Optobox_connector_board": optobox_powerboard_connector,
@@ -835,30 +887,30 @@ identifiers = Switch(
         "MOPS_chip": Error,
         "Power_cables": Error,
         "CAN_bus_cable": canbus,
-        "Pigtail": type0,
-        "Rigid_flex": Error,
-        "Data_PP0": type0,
-        "Power_pigtail": Error,
-        "Power_bustape": Error,
-        "Bare_bustape": Error,
-        "Pigtail_panel": type0,
-        "PP0": pp0,
-        "Finger": Error,
-        "Type_1_Data_link ": type1,
-        "Type_1_Power_DCS_line": type1,
-        "Type_1_Environmental_link": Error,
-        "PP1_connector": Error,
-        "PP1_connector_pieces_segments": Error,
-        "Type_1_strain_relief": Error,
-        "Type_2_power_cable": Error,
-        "Type_2_optobox_cable": Error,
-        "PP2_box": Error,
-        "Type_3_HV_cable": Error,
-        "Type_3_LV_cable": Error,
-        "MOPS_cable": Error,
-        "TiLoc": Error,
-        "OPTO_MOP": Error,
-        "PP3_power": Error,
+        "Pigtail": type01,
+        "Rigid_flex": type01,
+        "Data_PP0": type01,  # FIXME: OB Type-1 Inclined PCB???
+        "Power_pigtail": type01,
+        "Power_bustape": type01,
+        "Bare_bustape": type01,
+        "Pigtail_panel": type01,
+        "PP0": type01,
+        "Finger": type01,
+        "Data_link ": type1,
+        "Power_DCS_link": type1,
+        "Environmental_link": Error,
+        "PP1_connector": type01,
+        "PP1_connector_pieces_segments": type01,
+        "Strain_relief": Error,
+        "Type_2_power_cable": type2,
+        "Type_2_optobox_cable": type2,
+        "PP2_box": type2,
+        "Type_3_HV_cable": type3,
+        "Type_3_LV_cable": type3,
+        "MOPS_cable": type3,
+        "TiLock": type3,
+        "OPTO_MOPS": type3,
+        "PP3_power": type4,
     },
     # default=Bytes(7),
 )

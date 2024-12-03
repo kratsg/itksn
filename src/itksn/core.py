@@ -63,7 +63,7 @@ SerialNumberStruct = "SerialNumber" / Struct(
     ),
     "identifier"
     / Switch(
-        this.project_code,
+        this.subproject_code,
         {
             "inner_pixel": pixels.identifiers,
             "outer_pixel_barrel": pixels.identifiers,

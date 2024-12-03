@@ -167,3 +167,15 @@ def test_is_capillary():
     assert parsed.identifier.production_type == "Production"
     assert parsed.identifier.type == "R01"
     assert parsed.identifier.number == b"99999"
+
+
+def test_outer_endcap_data_pp0():
+    parsed = itksn.parse(b"20UPEDP2209999")
+    assert parsed.atlas_project == "atlas_detector"
+    assert parsed.system_code == "phaseII_upgrade"
+    assert parsed.project_code == "pixel"
+    assert parsed.subproject_code == "pixel_endcaps"
+    assert parsed.component_code == "Data_PP0"
+    assert parsed.identifier.layer == "L2"
+    assert parsed.identifier.flavor == "ring611_Front"
+    assert parsed.identifier.number == b"9999"

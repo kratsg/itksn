@@ -310,7 +310,7 @@ is_cable = Struct(
     "number" / Bytes(5),
 )
 
-pp0 = Struct(
+pi_type0_pp0 = Struct(
     "production_version"
     / EnumStr(
         Bytes(1),
@@ -334,7 +334,7 @@ pp0 = Struct(
 )
 
 # PB-PL, PB-PG
-ob_type0_cable = Struct(
+pb_type0_cable = Struct(
     "type" / EnumStr(Bytes(1), Flat=b"0", Inclined=b"1", Inclined_test_coupon=b"2"),
     "flavor"
     / Switch(
@@ -361,7 +361,7 @@ ob_type0_cable = Struct(
 )
 
 # PB-RF
-ob_type0_pp0 = Struct(
+pb_type0_pp0 = Struct(
     "type" / EnumStr(Bytes(1), Flat=b"0", Inclined=b"1", Inclined_test_coupon=b"2"),
     "flavor"
     / Switch(
@@ -392,7 +392,7 @@ ob_type0_pp0 = Struct(
     "number" / Bytes(4),
 )
 
-ob_type1_power = Struct(
+pb_type1_power = Struct(
     "type"
     / EnumStr(
         Bytes(1),
@@ -408,7 +408,7 @@ ob_type1_power = Struct(
     "number" / Bytes(5),
 )
 
-ob_type1_data_bundle = Struct(
+pb_type1_data_bundle = Struct(
     "flavor"
     / EnumStr(
         Bytes(2),
@@ -429,26 +429,26 @@ ob_type1_data_bundle = Struct(
     ),
 )
 
-ob_type1_data_inclined = Struct(
+pb_type1_data_inclined = Struct(
     "version" / Bytes(1),
     "manufacturer" / Bytes(1),
 )
 
-ob_type1_data = Struct(
+pb_type1_data = Struct(
     "_reserved" / Pointer(2, Bytes(2)),
     "data"
     / Switch(
         lambda ctx: ctx._reserved,  # pylint: disable=protected-access
         {
-            b"00": ob_type1_data_inclined,
+            b"00": pb_type1_data_inclined,
         },
-        default=ob_type1_data_bundle,
+        default=pb_type1_data_bundle,
     ),
     "length" / Bytes(2),
     "number" / Bytes(3),
 )
 
-oe_type0_data_mapping = Switch(
+pe_type0_data_mapping = Switch(
     lambda ctx: ctx.layer,
     {
         "L2": EnumStr(
@@ -479,23 +479,23 @@ oe_type0_data_mapping = Switch(
     },
 )
 
-oe_type0_data = Struct(
+pe_type0_data = Struct(
     "layer" / EnumStr(Bytes(1), L2=b"2", L3=b"3", L4=b"4", All=b"9"),
-    "flavor" / oe_type0_data_mapping,
+    "flavor" / pe_type0_data_mapping,
     "reserved" / Const(b"0"),
     "number" / Bytes(4),
 )
 
-oe_type0_power = Struct(
+pe_type0_power = Struct(
     "layer" / EnumStr(Bytes(1), L2=b"2", L3=b"3", L4=b"4", All=b"9"),
     "flavor" / Bytes(1),
     "reserved" / Const(b"0"),
     "number" / Bytes(4),
 )
 
-# FIXME: merge with oe_type0_power?
+# FIXME: merge with pe_type0_power?
 # 1P (PP1_connector) or PB (Power_bustape)
-oe_type1 = Struct(
+pe_type1 = Struct(
     "flavor" / Bytes(1),
     "reserved" / Const(b"0"),
     "length"
@@ -715,7 +715,7 @@ yy_identifiers = {
     "Power_bustape": ("PB", "PI", "PB", "PE"),
     "Bare_bustape": ("NB", "PE"),
     "Pigtail_panel": ("PL", "PB"),
-    "PP0": ("P0", "PI"),
+    "PP0": ("P0", "PI"),  # FIXME: conflict with Triplet_L0_R0_PC
     "Finger": ("FI", "PI"),
     "Data_link ": ("D1", "PI", "PB", "PE"),
     "Power_DCS_line": ("P1", "PI", "PB", "PE"),
@@ -878,27 +878,29 @@ identifiers = Switch(
         "Power_cables": Error,  # FIXME
         "CAN_bus_cable": canbus,
         # Type-0 and Type-1 cables below
-        "Pigtail": subproject_switch(pb=ob_type0_cable),  # IS Type-0  (FIXME: not PI)
-        "Rigid_flex": subproject_switch(pb=ob_type0_pp0),  # IS Type-0
+        "Pigtail": subproject_switch(
+            pb=pb_type0_cable
+        ),  # IS Type-0  (FIXME: no PI supported)
+        "Rigid_flex": subproject_switch(pb=pb_type0_pp0),  # IS Type-0
         "Data_PP0": subproject_switch(
-            pe=oe_type0_data
+            pe=pe_type0_data
         ),  # IS Type-0  # OB Type-1 Inclined PCB??? (FIXME: not PB)
-        "Power_pigtail": subproject_switch(pe=oe_type0_power),  # IS Type-0  # OE Type-0
+        "Power_pigtail": subproject_switch(pe=pe_type0_power),  # IS Type-0  # OE Type-0
         "Power_bustape": subproject_switch(
-            pe=oe_type0_power
+            pe=pe_type0_power
         ),  # FIXME: only PE needed, not PI/PB
         "Bare_bustape": Error,  # FIXME: not used?
-        "Pigtail_panel": ob_type0_cable,
-        "PP0": subproject_switch(),  # IS only
+        "Pigtail_panel": pb_type0_cable,
+        "PP0": subproject_switch(pi=pi_type0_pp0),  # IS only
         "Finger": Error,  # FIXME: not used/defined?
         "Data_link ": subproject_switch(
-            pb=ob_type1_data
+            pb=pb_type1_data
         ),  # IS Type-1, (FIXME: only PB/PI needed, not PE)
         "Power_DCS_line": subproject_switch(
-            pb=ob_type1_power
+            pb=pb_type1_power
         ),  # IS Type-1, (FIXME: only PB/PI needed, not PE)
         "Environmental_link": Error,  # Type-0 and Type-1 cable (FIXME: not defined?)
-        "PP1_connector": subproject_switch(pe=oe_type1),  # FIXME: not defined well)
+        "PP1_connector": subproject_switch(pe=pe_type1),  # FIXME: not defined well)
         "PP1_connector_pieces_segments": subproject_switch(),  # FIXME: not defined well)
         # End Type-0 and Type-1
         "Strain_relief": Error,

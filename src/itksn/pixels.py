@@ -119,11 +119,33 @@ bare_module = Struct(
     "number" / Bytes(5),
 )
 
+pcb_loading_site = EnumStr(
+    Bytes(1), Oslo=b"2", TOPRO=b"5", NORBIT=b"6", CERN=b"7", unloaded=b"9"
+)
+
+pcb_reception_site = EnumStr(
+    Bytes(1),
+    Genova=b"0",
+    Barcelona=b"1",
+    Oslo=b"2",
+    Milano=b"3",
+    Bergen=b"4",
+)
+
 pcb = Struct(
     "FE_chip_version" / fe_chip_version_pcb,
     "PCB_manufacturer" / pcb_manufacturer,
     "number" / Bytes(5),
 )
+
+pcb_triplets = Struct(
+    "FE_chip_version" / fe_chip_version_pcb,
+    "PCB_manufacturer" / pcb_manufacturer,
+    "loading" / pcb_loading_site,
+    "reception" / pcb_reception_site,
+    "number" / Bytes(3),
+)
+
 
 module = Struct(
     "FE_chip_version" / fe_chip_version,
@@ -715,7 +737,7 @@ yy_identifiers = {
     "Power_bustape": ("PB", "PI", "PB", "PE"),
     "Bare_bustape": ("NB", "PE"),
     "Pigtail_panel": ("PL", "PB"),
-    "PP0": ("P0", "PI"),  # FIXME: conflict with Triplet_L0_R0_PC
+    "PP0": ("0P", "PI"),  # FIXME: conflict with Triplet_L0_R0_PC
     "Finger": ("FI", "PI"),
     "Data_link ": ("D1", "PI", "PB", "PE"),
     "Power_DCS_line": ("P1", "PI", "PB", "PE"),
@@ -787,9 +809,9 @@ identifiers = Switch(
         "Dummy_single_bare_module": bare_module,
         "FourInch_bare_module_gel_pack": Error,
         "SixInch_bare_module_gel_pack": Error,
-        "Triplet_L0_Stave_PCB": pcb,
-        "Triplet_L0_R0_PCB": pcb,
-        "Triplet_L0_R0p5_PCB": pcb,
+        "Triplet_L0_Stave_PCB": pcb_triplets,
+        "Triplet_L0_R0_PCB": pcb_triplets,
+        "Triplet_L0_R0p5_PCB": pcb_triplets,
         "Quad_PCB": pcb,
         "Dual_PCB": pcb,
         "PCB_test_coupon": pcb,

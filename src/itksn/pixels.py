@@ -37,17 +37,29 @@ triplet_assembly_site = EnumStr(
     LBNL=b"4",
 )
 
-batch_number = EnumStr(
-    Bytes(1),
-    RD53A=b"0",
-    ITkpix_v1=b"1",
-    ITkpix_v2=b"2",
-)
+batch_number = {
+    0: b"RD53A",
+    1: b"ITkpix_v1",
+    2: b"ITkpix_v2",
+    3: b"ITkpix_v2",
+    4: b"ITkpix_v2",
+    5: b"ITkpix_v2",
+    6: b"ITkpix_v2",
+    7: b"ITkpix_v2",
+    8: b"ITkpix_v2",
+    9: b"ITkpix_v2",
+    10: b"ITkpix_v2",
+    11: b"ITkpix_v2",
+    12: b"ITkpix_v2",
+    13: b"ITkpix_v2",
+    14: b"ITkpix_v2",
+    15: b"ITkpix_v2",
+}
 
 fe_chip = Struct(
     "number" / Bytes(7),
     "batch_number" / Computed(lambda ctx: (int(ctx.number) & 0xF0000) >> 16),  # type: ignore[arg-type,return-value]
-    "batch" / Computed(lambda ctx: batch_number.parse(str(ctx.batch_number).encode())),  # type: ignore[arg-type,return-value]
+    "batch" / Computed(lambda ctx: batch_number[ctx.batch_number]),  # type: ignore[arg-type,return-value]
     "wafer" / Computed(lambda ctx: (int(ctx.number) & 0x0FF00) >> 8),  # type: ignore[arg-type,return-value]
     "row" / Computed(lambda ctx: (int(ctx.number) & 0x000F0) >> 4),  # type: ignore[arg-type,return-value]
     "column" / Computed(lambda ctx: (int(ctx.number) & 0x0000F) >> 0),  # type: ignore[arg-type,return-value]

@@ -453,7 +453,7 @@ ob_type1_data = Struct(
     "_reserved" / Pointer(2, Bytes(2)),
     "data"
     / Switch(
-        lambda ctx: ctx._reserved,
+        lambda ctx: ctx._reserved,  # pylint: disable=protected-access
         {
             b"00": ob_type1_data_termination,
         },

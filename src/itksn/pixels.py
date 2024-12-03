@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+from typing import TypeVar
+
 from construct import (
     Bytes,
     Computed,
     Const,
+    Construct,
     Error,
     Pointer,
     Struct,
@@ -242,7 +245,7 @@ optoboard = Struct(
     "number" / Bytes(5),
 )
 
-optoboard_termination = Struct(
+termination_board = Struct(
     "production_version" / Const(b"0"),
     "flavor"
     / EnumStr(
@@ -253,7 +256,7 @@ optoboard_termination = Struct(
         Mirror_L_short=b"3",
         Normal_slim=b"4",
         Mirror_slim=b"5",
-        Normal_extended_slim=b"6",
+        Normal_extended_slim=b"6",  # FIXME: OB Type-1 Termination Board does not have this
     ),
     "number" / Bytes(5),
 )
@@ -279,7 +282,7 @@ canbus = Struct(
     "number" / Bytes(5),
 )
 
-is_type = Struct(
+is_cable = Struct(
     "production_version"
     / EnumStr(
         Bytes(1),
@@ -330,7 +333,8 @@ pp0 = Struct(
     "number" / Bytes(5),
 )
 
-ob_type0_nonpp0 = Struct(
+# PB-PL, PB-PG
+ob_type0_cable = Struct(
     "type" / EnumStr(Bytes(1), Flat=b"0", Inclined=b"1", Inclined_test_coupon=b"2"),
     "flavor"
     / Switch(
@@ -356,6 +360,7 @@ ob_type0_nonpp0 = Struct(
     "number" / Bytes(4),
 )
 
+# PB-RF
 ob_type0_pp0 = Struct(
     "type" / EnumStr(Bytes(1), Flat=b"0", Inclined=b"1", Inclined_test_coupon=b"2"),
     "flavor"
@@ -385,11 +390,6 @@ ob_type0_pp0 = Struct(
         Prototype=b"9",
     ),
     "number" / Bytes(4),
-)
-
-ob_type0 = Switch(
-    lambda ctx: ctx.component_code,
-    {"PP0": ob_type0_pp0, "Pigtail_panel": ob_type0_nonpp0, "Pigtail": ob_type0_nonpp0},
 )
 
 ob_type1_power = Struct(
@@ -429,21 +429,6 @@ ob_type1_data_bundle = Struct(
     ),
 )
 
-ob_type1_data_termination = Struct(
-    "version" / Bytes(1),
-    "flavor"
-    / EnumStr(
-        Bytes(1),
-        Normal_L_long=b"0",
-        Normal_L_short=b"1",
-        Mirror_L_long=b"2",
-        Mirror_L_short=b"3",
-        Normal_slim=b"4",
-        Mirror_slim=b"5",
-    ),
-)
-
-# FIXME: unused right now (see ob_type1_data)
 ob_type1_data_inclined = Struct(
     "version" / Bytes(1),
     "manufacturer" / Bytes(1),
@@ -455,20 +440,12 @@ ob_type1_data = Struct(
     / Switch(
         lambda ctx: ctx._reserved,  # pylint: disable=protected-access
         {
-            b"00": ob_type1_data_termination,
+            b"00": ob_type1_data_inclined,
         },
         default=ob_type1_data_bundle,
     ),
     "length" / Bytes(2),
     "number" / Bytes(3),
-)
-
-ob_type1 = Switch(
-    lambda ctx: ctx.component_code,
-    {
-        "Power_DCS_line": ob_type1_power,
-        "Data_link": ob_type1_data,
-    },
 )
 
 oe_type0_data_mapping = Switch(
@@ -502,20 +479,22 @@ oe_type0_data_mapping = Switch(
     },
 )
 
-oe_type0 = Struct(
+oe_type0_data = Struct(
     "layer" / EnumStr(Bytes(1), L2=b"2", L3=b"3", L4=b"4", All=b"9"),
-    "flavor"
-    / Switch(
-        lambda ctx: ctx._.component_code,
-        {
-            "Data_PP0": oe_type0_data_mapping,
-        },
-        default=Bytes(1),
-    ),
+    "flavor" / oe_type0_data_mapping,
     "reserved" / Const(b"0"),
     "number" / Bytes(4),
 )
 
+oe_type0_power = Struct(
+    "layer" / EnumStr(Bytes(1), L2=b"2", L3=b"3", L4=b"4", All=b"9"),
+    "flavor" / Bytes(1),
+    "reserved" / Const(b"0"),
+    "number" / Bytes(4),
+)
+
+# FIXME: merge with oe_type0_power?
+# 1P (PP1_connector) or PB (Power_bustape)
 oe_type1 = Struct(
     "flavor" / Bytes(1),
     "reserved" / Const(b"0"),
@@ -527,28 +506,6 @@ oe_type1 = Struct(
     ),
     "number" / Bytes(4),
 )
-
-type0 = Switch(
-    lambda ctx: ctx.subproject_code,
-    {
-        "inner_pixel": is_type,
-        "outer_pixel_barrel": ob_type0,
-        "pixel_general": Error,
-        "pixel_endcaps": oe_type0,
-    },
-)
-
-type1 = Switch(
-    lambda ctx: ctx.subproject_code,
-    {
-        "inner_pixel": is_type,
-        "outer_pixel_barrel": ob_type1,
-        "pixel_general": Error,
-        "pixel_endcaps": Error,
-    },
-)
-
-type01 = Error  # FIXME
 
 type2 = Struct(
     "flavor"
@@ -598,6 +555,28 @@ mops_chip = Struct(
     ),
     "vendor" / Bytes(4),
 )
+
+# from construct-typing
+ParsedType_co = TypeVar("ParsedType_co", covariant=True)
+BuildTypes_contra = TypeVar("BuildTypes_contra", contravariant=True)
+
+
+def subproject_switch(
+    pg: Construct[ParsedType_co, BuildTypes_contra] | None = None,
+    pi: Construct[ParsedType_co, BuildTypes_contra] | None = None,
+    pe: Construct[ParsedType_co, BuildTypes_contra] | None = None,
+    pb: Construct[ParsedType_co, BuildTypes_contra] | None = None,
+) -> Construct[ParsedType_co, BuildTypes_contra]:
+    return Switch(
+        lambda ctx: ctx.subproject_code,
+        {
+            "inner_pixel": pi or Error,
+            "outer_pixel_barrel": pb or Error,
+            "pixel_general": pg or Error,
+            "pixel_endcaps": pe or Error,
+        },
+    )
+
 
 yy_identifiers = {
     # pixel modules and subcomponents
@@ -883,7 +862,7 @@ identifiers = Switch(
         "Serial_powering_scheme": local_supports,
         # services
         "Optoboard": optoboard,
-        "Optoboard_termination_board": optoboard_termination,  # OB Type-1 Termination Board??? (FIXME: not PB)
+        "Optoboard_termination_board": termination_board,  # OB Type-1 Termination Board (FIXME: only PG, no PB)
         "Optobox": optobox,
         "Optobox_powerbox": optobox,
         "Optobox_connector_board": optobox_powerboard_connector,
@@ -899,20 +878,28 @@ identifiers = Switch(
         "Power_cables": Error,  # FIXME
         "CAN_bus_cable": canbus,
         # Type-0 and Type-1 cables below
-        "Pigtail": type01,  # IS Type-0, Type-1  # OB Type-0 (FIXME: not PI)
-        "Rigid_flex": type01,  # IS Type-0, Type-1  # OB Type-0 "PP0"
-        "Data_PP0": type01,  # IS Type-0, Type-1  # OE Type-0 # OB Type-1 Inclined PCB??? (FIXME: not PB)
-        "Power_pigtail": type01,  # IS Type-0, Type-1  # OE Type-0
-        "Power_bustape": type01,  # OE Type-0 (FIXME: only PE needed, not PI/PB)
+        "Pigtail": subproject_switch(pb=ob_type0_cable),  # IS Type-0  (FIXME: not PI)
+        "Rigid_flex": subproject_switch(pb=ob_type0_pp0),  # IS Type-0
+        "Data_PP0": subproject_switch(
+            pe=oe_type0_data
+        ),  # IS Type-0  # OB Type-1 Inclined PCB??? (FIXME: not PB)
+        "Power_pigtail": subproject_switch(pe=oe_type0_power),  # IS Type-0  # OE Type-0
+        "Power_bustape": subproject_switch(
+            pe=oe_type0_power
+        ),  # FIXME: only PE needed, not PI/PB
         "Bare_bustape": Error,  # FIXME: not used?
-        "Pigtail_panel": type01,  # OB Type-0
-        "PP0": type01,  # IS only
-        "Finger": Error,  # FIXME: not used?
-        "Data_link ": type01,  # OB Type-1 (FIXME: only PB/PI needed, not PE)
-        "Power_DCS_line": type01,  # OB Type-1 (FIXME: only PB/PI needed, not PE)
+        "Pigtail_panel": ob_type0_cable,
+        "PP0": subproject_switch(),  # IS only
+        "Finger": Error,  # FIXME: not used/defined?
+        "Data_link ": subproject_switch(
+            pb=ob_type1_data
+        ),  # IS Type-1, (FIXME: only PB/PI needed, not PE)
+        "Power_DCS_line": subproject_switch(
+            pb=ob_type1_power
+        ),  # IS Type-1, (FIXME: only PB/PI needed, not PE)
         "Environmental_link": Error,  # Type-0 and Type-1 cable (FIXME: not defined?)
-        "PP1_connector": type01,  # FIXME: only for PI? not PB/PE? not defined well)
-        "PP1_connector_pieces_segments": type01,  # FIXME: only for PI? not PB/PE? not defined well)
+        "PP1_connector": subproject_switch(pe=oe_type1),  # FIXME: not defined well)
+        "PP1_connector_pieces_segments": subproject_switch(),  # FIXME: not defined well)
         # End Type-0 and Type-1
         "Strain_relief": Error,
         "Type_2_power_cable": type2,

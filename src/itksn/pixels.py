@@ -17,6 +17,7 @@ from itksn.common import EnumStr
 
 pcb_manufacturer = EnumStr(
     Bytes(1),
+    Dummy=b"0",
     EPEC=b"1",
     NCAB_100um=b"2",
     ATLAFLEX=b"3",
@@ -141,8 +142,16 @@ pcb = Struct(
 pcb_triplets = Struct(
     "FE_chip_version" / fe_chip_version_pcb,
     "PCB_manufacturer" / pcb_manufacturer,
-    "loading" / pcb_loading_site,
-    "reception" / pcb_reception_site,
+    "loading"
+    / Switch(
+        lambda ctx: ctx.PCB_manufacturer, {"Dummy": Bytes(1)}, default=pcb_loading_site
+    ),  # esdape hatch for some dummy/digitals
+    "reception"
+    / Switch(
+        lambda ctx: ctx.PCB_manufacturer,
+        {"Dummy": Bytes(1)},
+        default=pcb_reception_site,
+    ),  # esdape hatch for some dummy/digitals
     "number" / Bytes(3),
 )
 

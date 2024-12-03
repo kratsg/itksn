@@ -466,7 +466,7 @@ ob_type1_data = Struct(
 ob_type1 = Switch(
     lambda ctx: ctx.component_code,
     {
-        "Power_DCS_link": ob_type1_power,
+        "Power_DCS_line": ob_type1_power,
         "Data_link": ob_type1_data,
     },
 )
@@ -586,6 +586,17 @@ type4 = Struct(
         Pre_production_rad_hard=b"1",
         Production=b"2",
     )
+)
+
+mops_chip = Struct(
+    "reserved" / Const(b"00"),
+    "production_version"
+    / EnumStr(
+        Bytes(1),
+        Pre_production=b"0",
+        Production=b"3",
+    ),
+    "vendor" / Bytes(4),
 )
 
 yy_identifiers = {
@@ -728,7 +739,7 @@ yy_identifiers = {
     "PP0": ("P0", "PI"),
     "Finger": ("FI", "PI"),
     "Data_link ": ("D1", "PI", "PB", "PE"),
-    "Power_DCS_link": ("P1", "PI", "PB", "PE"),
+    "Power_DCS_line": ("P1", "PI", "PB", "PE"),
     "Environmental_link": ("E1", "PI", "PB", "PE"),
     "PP1_connector": ("1P", "PI", "PB", "PE"),
     "PP1_connector_pieces_segments": ("CS", "PI", "PB", "PE"),
@@ -872,35 +883,37 @@ identifiers = Switch(
         "Serial_powering_scheme": local_supports,
         # services
         "Optoboard": optoboard,
-        "Optoboard_termination_board": optoboard_termination,  # FIXME: OB Type-1 Termination Board???
+        "Optoboard_termination_board": optoboard_termination,  # OB Type-1 Termination Board??? (FIXME: not PB)
         "Optobox": optobox,
         "Optobox_powerbox": optobox,
         "Optobox_connector_board": optobox_powerboard_connector,
         "Optobox_optical_fan_out": optobox,
-        "Optopanel": Error,
-        "Optopanel_cooling_plate": Error,
+        "Optopanel": Error,  # FIXME
+        "Optopanel_cooling_plate": Error,  # FIXME
         "Optobox_powerboard": optobox_powerboard_connector,
-        "GBCR_chip": Error,
-        "Vtrx_module": Error,
-        "Bpol2V5_chip": Error,
-        "Bpol12V_chip": Error,
-        "MOPS_chip": Error,
-        "Power_cables": Error,
+        "GBCR_chip": Error,  # FIXME
+        "Vtrx_module": Error,  # FIXME
+        "Bpol2V5_chip": Error,  # FIXME
+        "Bpol12V_chip": Error,  # FIXME
+        "MOPS_chip": mops_chip,  # FIXME: phrasing in the document is awful
+        "Power_cables": Error,  # FIXME
         "CAN_bus_cable": canbus,
-        "Pigtail": type01,
-        "Rigid_flex": type01,
-        "Data_PP0": type01,  # FIXME: OB Type-1 Inclined PCB???
-        "Power_pigtail": type01,
-        "Power_bustape": type01,
-        "Bare_bustape": type01,
-        "Pigtail_panel": type01,
-        "PP0": type01,
-        "Finger": type01,
-        "Data_link ": type1,
-        "Power_DCS_link": type1,
-        "Environmental_link": Error,
-        "PP1_connector": type01,
-        "PP1_connector_pieces_segments": type01,
+        # Type-0 and Type-1 cables below
+        "Pigtail": type01,  # IS Type-0, Type-1  # OB Type-0 (FIXME: not PI)
+        "Rigid_flex": type01,  # IS Type-0, Type-1  # OB Type-0 "PP0"
+        "Data_PP0": type01,  # IS Type-0, Type-1  # OE Type-0 # OB Type-1 Inclined PCB??? (FIXME: not PB)
+        "Power_pigtail": type01,  # IS Type-0, Type-1  # OE Type-0
+        "Power_bustape": type01,  # OE Type-0 (FIXME: only PE needed, not PI/PB)
+        "Bare_bustape": Error,  # FIXME: not used?
+        "Pigtail_panel": type01,  # OB Type-0
+        "PP0": type01,  # IS only
+        "Finger": Error,  # FIXME: not used?
+        "Data_link ": type01,  # OB Type-1 (FIXME: only PB/PI needed, not PE)
+        "Power_DCS_line": type01,  # OB Type-1 (FIXME: only PB/PI needed, not PE)
+        "Environmental_link": Error,  # Type-0 and Type-1 cable (FIXME: not defined?)
+        "PP1_connector": type01,  # FIXME: only for PI? not PB/PE? not defined well)
+        "PP1_connector_pieces_segments": type01,  # FIXME: only for PI? not PB/PE? not defined well)
+        # End Type-0 and Type-1
         "Strain_relief": Error,
         "Type_2_power_cable": type2,
         "Type_2_optobox_cable": type2,

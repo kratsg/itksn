@@ -128,6 +128,7 @@ bare_module = Struct(
         L0_inner_pixel_planar_sensor_tile=b"3",
         L1_inner_pixel_quad_sensor_tile=b"4",
         Outer_pixel_quad_sensor_tile=b"5",
+        Dummy_sensor_tile=b"9",
     ),
     "number" / Bytes(5),
 )

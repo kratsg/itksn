@@ -311,7 +311,9 @@ termination_board = Struct(
 
 optobox_powerboard_connector = Struct(
     "production_version"
-    / Select(Const(b"2"), Const(b"3")),  # FIXME: "3" not in table 9
+    / Select(
+        Const(b"0"), Const(b"2"), Const(b"3")
+    ),  # FIXME: "0" and "3" not in table 9
     "orientation" / orientation,
     "number" / Bytes(5),
 )

@@ -291,7 +291,7 @@ optoboard = Struct(
     "production_version"
     / Select(
         Const(b"2"), Const(b"3"), Const(b"4"), Const(b"5")
-    ),  # FIXME: "2", "3" not defined in table 6
+    ),  # FIXME: "2", "3", "5" not defined in table 6
     "LpGBT_count"
     / EnumStr(
         Bytes(1),
@@ -973,7 +973,7 @@ yy_identifiers = {
     "Dummy_Power_bustape": ("QN", "PI", "PB", "PE"),
     # "Dummy_Bare_bustape": ("", "PE"), # FIXME: missing dummy
     "Dummy_Pigtail_panel": ("QO", "PB"),
-    "Dummy_PP0": ("QP", "PI"),  # FIXME: conflict with Triplet_L0_R0_PC
+    "Dummy_PP0": ("QP", "PI"),
     "Dummy_Finger": ("QV", "PI"),
     "Dummy_Data_link ": ("QQ", "PI", "PB", "PE"),
     "Dummy_Power_DCS_line": ("QR", "PI", "PB", "PE"),
@@ -1239,49 +1239,41 @@ identifiers = Switch(
         "PP3_power": type4,
         # Dummy services
         "Dummy_Optoboard": optoboard,
-        "Dummy_Optoboard_termination_board": termination_board,  # OB Type-1 Termination Board (FIXME: only PG, no PB)
+        "Dummy_Optoboard_termination_board": termination_board,
         "Dummy_Optobox": optobox,
         "Dummy_Optobox_powerbox": optobox,
         "Dummy_Optobox_connector_board": optobox_powerboard_connector,
         "Dummy_Optobox_optical_fan_out": optobox,
-        "Dummy_Optopanel": Error,  # FIXME
-        "Dummy_Optopanel_cooling_plate": Error,  # FIXME
+        "Dummy_Optopanel": Error,
+        "Dummy_Optopanel_cooling_plate": Error,
         "Dummy_Optobox_powerboard": optobox_powerboard_connector,
-        "Dummy_GBCR_chip": Error,  # FIXME
-        "Dummy_Vtrx_module": Error,  # FIXME
-        "Dummy_Bpol2V5_chip": Error,  # FIXME
-        "Dummy_Bpol2V5_carrier_board": Error,  # FIXME
-        "Dummy_Bpol12V_chip": Error,  # FIXME
-        "Dummy_MOPS_chip": mops_chip,  # FIXME: phrasing in the document is awful
-        "Dummy_Power_cables": Error,  # FIXME
+        "Dummy_GBCR_chip": Error,
+        "Dummy_Vtrx_module": Error,
+        "Dummy_Bpol2V5_chip": Error,
+        "Dummy_Bpol2V5_carrier_board": Error,
+        "Dummy_Bpol12V_chip": Error,
+        "Dummy_MOPS_chip": mops_chip,
+        "Dummy_Power_cables": Error,
         "Dummy_CAN_bus_cable": canbus,
-        "Dummy_Pigtail": subproject_switch(
-            pb=pb_type0_cable
-        ),  # IS Type-0  (FIXME: no PI supported)
+        "Dummy_Pigtail": subproject_switch(pb=pb_type0_cable),  # IS Type-0
         "Dummy_Rigid_flex": subproject_switch(pb=pb_type0_pp0),  # IS Type-0
         "Dummy_Data_PP0": subproject_switch(
             pe=pe_type0_data
-        ),  # IS Type-0  # OB Type-1 Inclined PCB??? (FIXME: not PB)
+        ),  # IS Type-0  # OB Type-1 Inclined PCB???
         "Dummy_Power_pigtail": subproject_switch(
             pe=pe_type0_power
         ),  # IS Type-0  # OE Type-0
-        "Dummy_Power_bustape": subproject_switch(
-            pe=pe_type0_power
-        ),  # FIXME: only PE needed, not PI/PB
+        "Dummy_Power_bustape": subproject_switch(pe=pe_type0_power),
         "Dummy_Pigtail_panel": pb_type0_cable,
         "Dummy_PP0": subproject_switch(pi=pi_type0_pp0),  # IS only
-        "Dummy_Finger": Error,  # FIXME: not used/defined?
-        "Dummy_Data_link ": subproject_switch(
-            pb=pb_type1_data
-        ),  # IS Type-1, (FIXME: only PB/PI needed, not PE)
+        "Dummy_Finger": Error,
+        "Dummy_Data_link ": subproject_switch(pb=pb_type1_data),  # IS Type-1,
         "Dummy_Power_DCS_line": subproject_switch(
             pe=pe_type1, pb=pb_type1_power, pi=is_cable
-        ),  # IS Type-1, (FIXME: only PB/PI needed, not PE)
-        "Dummy_Environmental_link": Error,  # Type-0 and Type-1 cable (FIXME: not defined?)
-        "Dummy_PP1_connector": subproject_switch(
-            pe=pe_type1
-        ),  # FIXME: not defined well)
-        "Dummy_PP1_connector_pieces_segments": subproject_switch(),  # FIXME: not defined well)
+        ),  # IS Type-1,
+        "Dummy_Environmental_link": Error,
+        "Dummy_PP1_connector": subproject_switch(pe=pe_type1),
+        "Dummy_PP1_connector_pieces_segments": subproject_switch(),
         "Dummy_Type_2_power_cable": type2,
         "Dummy_Type_2_optobox_cable": type2,
         "Dummy_PP2_box": type2,

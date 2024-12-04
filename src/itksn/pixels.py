@@ -764,6 +764,7 @@ yy_identifiers = {
     "GBCR_chip": ("OG", "PG"),
     "Vtrx_module": ("OV", "PG"),
     "Bpol2V5_chip": ("O5", "PG"),
+    "Bpol2V5_carrier_board": ("OK", "PG"),
     "Bpol12V_chip": ("O2", "PG"),
     "MOPS_chip": ("MP", "PG"),
     "Power_cables": ("OI", "PG"),
@@ -947,6 +948,7 @@ identifiers = Switch(
         "GBCR_chip": Error,  # FIXME
         "Vtrx_module": Error,  # FIXME
         "Bpol2V5_chip": Error,  # FIXME
+        "Bpol2V5_carrier_board": Error,  # FIXME
         "Bpol12V_chip": Error,  # FIXME
         "MOPS_chip": mops_chip,  # FIXME: phrasing in the document is awful
         "Power_cables": Error,  # FIXME

@@ -761,6 +761,7 @@ yy_identifiers = {
     "Optopanel": ("OS", "PG"),
     "Optopanel_cooling_plate": ("OO", "PG"),
     "Optobox_powerboard": ("OP", "PG"),
+    "LpGBT_chip": ("OL", "PG"),
     "GBCR_chip": ("OG", "PG"),
     "Vtrx_module": ("OV", "PG"),
     "Bpol2V5_chip": ("O5", "PG"),
@@ -945,6 +946,7 @@ identifiers = Switch(
         "Optopanel": Error,  # FIXME
         "Optopanel_cooling_plate": Error,  # FIXME
         "Optobox_powerboard": optobox_powerboard_connector,
+        "LpGBT_chip": Error,  # FIXME
         "GBCR_chip": Error,  # FIXME
         "Vtrx_module": Error,  # FIXME
         "Bpol2V5_chip": Error,  # FIXME

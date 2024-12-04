@@ -8,6 +8,8 @@ from construct import (
     Const,
     Construct,
     Error,
+    GreedyBytes,
+    Pass,
     Pointer,
     Select,
     Struct,
@@ -72,6 +74,7 @@ fe_chip_version = EnumStr(
     ITkpix_v1=b"1",
     ITkpix_v1p1=b"2",
     ITkpix_v2=b"3",
+    No_chip=b"9",
 )
 
 fe_chip_version_pcb = EnumStr(
@@ -172,8 +175,11 @@ pcb_triplets = Struct(
 
 module = Struct(
     "FE_chip_version" / fe_chip_version,
-    "PCB_manufacturer" / pcb_manufacturer,
-    "number" / Bytes(5),
+    "PCB_manufacturer"
+    / Switch(
+        lambda ctx: ctx.FE_chip_version, {"RD53A": pcb_manufacturer}, default=Pass
+    ),
+    "number" / GreedyBytes,
 )
 triplet_module = Struct(
     "FE_chip_version" / fe_chip_version,
@@ -282,10 +288,7 @@ orientation = EnumStr(
 
 optoboard = Struct(
     "production_version"
-    / EnumStr(
-        Bytes(1),
-        four=b"4",
-    ),
+    / Select(Const(b"2"), Const(b"4")),  # FIXME: "2" not defined in table 6
     "LpGBT_count"
     / EnumStr(
         Bytes(1),
@@ -644,6 +647,76 @@ def subproject_switch(
     )
 
 
+"""
+# does not exist
+TP: OEC Ti pipe for HR - TI_PIPE_L2 (20UPETP2000001, 20UPETP2000002, 20UPETP2000003, 20UPETP2000004, 20UPETP2000005, 20UPETP2000007, 20UPETP2000008, 20UPETP2000009, 20UPETP2000010, 20UPETP2000012, 20UPETP2000013, 20UPETP2000014, 20UPETP2000015, 20UPETP2000016, 20UPETP2000017, 20UPETP2000018, 20UPETP2000019, 20UPETP2100001, 20UPETP2100002, 20UPETP2100003, 20UPETP2100004, 20UPETP2100005, 20UPETP2100006, 20UPETP2100007, 20UPETP2100008, 20UPETP2100009, 20UPETP2100010, 20UPETP2100011, 20UPETP2100012, 20UPETP2100013, 20UPETP2100014, 20UPETP2100015, 20UPETP2100016, 20UPETP2100017, 20UPETP2100018, 20UPETP2100019, 20UPETP2100020, 20UPETP2100021, 20UPETP2100022, 20UPETP2100023, 20UPETP2100024, 20UPETP2100025, 20UPETP2100026, 20UPETP2100027, 20UPETP2100028, 20UPETP2100029, 20UPETP2100030, 20UPETP2100031, 20UPETP2100032, 20UPETP2100033, 20UPETP2100034, 20UPETP2100035, 20UPETP2100036, 20UPETP2100037, 20UPETP2100038, 20UPETP2100039, 20UPETP2100040, 20UPETP2200001, 20UPETP2200002, 20UPETP2200003, 20UPETP2200004, 20UPETP2900001, 20UPETP2900002, 20UPETP2900003, 20UPETP2900004, 20UPETP3000001, 20UPETP3000002, 20UPETP3000003, 20UPETP3000004, 20UPETP3200001, 20UPETP3200002, 20UPETP3200003, 20UPETP3200004, 20UPETP3200005, 20UPETP3900001, 20UPETP3900002, 20UPETP3900003, 20UPETP4000002, 20UPETP4000003, 20UPETP4000004, 20UPETP4000005, 20UPETP4000006, 20UPETP4000007, 20UPETP4000008, 20UPETP4000009, 20UPETP4200001, 20UPETP4200002, 20UPETP4200003)
+LM: OB Loaded Module Cell - Dummy (20UPBLM0000015, 20UPBLM0000016, 20UPBLM0000017, 20UPBLM0000018, 20UPBLM0000019, 20UPBLM0000020, 20UPBLM0000021, 20UPBLM0000022, 20UPBLM0000023, 20UPBLM0000024, 20UPBLM0000025, 20UPBLM0000026, 20UPBLM0000027, 20UPBLM0000028, 20UPBLM0000029, 20UPBLM0000030, 20UPBLM0000031, 20UPBLM0000032, 20UPBLM0000033, 20UPBLM0000034, 20UPBLM0000035, 20UPBLM0000036, 20UPBLM0000037, 20UPBLM0000038, 20UPBLM0000039, 20UPBLM0000040, 20UPBLM0000041, 20UPBLM0000042, 20UPBLM0000043, 20UPBLM0000044, 20UPBLM0000045, 20UPBLM0000046, 20UPBLM0000047, 20UPBLM0000048, 20UPBLM0000049, 20UPBLM0000050, 20UPBLM0000089, 20UPBLM0000126, 20UPBLM0000127, 20UPBLM0000128, 20UPBLM0000129, 20UPBLM0000130, 20UPBLM0000131, 20UPBLM0000132, 20UPBLM0000133, 20UPBLM0000134, 20UPBLM0000135, 20UPBLM0000136, 20UPBLM0000137, 20UPBLM0000138, 20UPBLM0000139, 20UPBLM0000140, 20UPBLM0000141, 20UPBLM0000142, 20UPBLM0000143, 20UPBLM0000144, 20UPBLM0000145, 20UPBLM0000146, 20UPBLM0000147, 20UPBLM0000148, 20UPBLM0000149, 20UPBLM0000150, 20UPBLM0000151, 20UPBLM0000152, 20UPBLM0000153, 20UPBLM0000154, 20UPBLM0000155, 20UPBLM0000156, 20UPBLM0000157, 20UPBLM0000158, 20UPBLM0000159, 20UPBLM0000160, 20UPBLM0000161, 20UPBLM0000162, 20UPBLM0000163, 20UPBLM0000164, 20UPBLM0000197, 20UPBLM0000198)
+YZ: test module monika - quad module (20UPGYZ0000001, 20UPGYZ0000003, 20UPGYZ0000004, 20UPGYZ0000005, 20UPGYZ1000001, 20UPGYZ1000002, 20UPGYZ1000003, 20UPGYZ1000007, 20UPGYZ2000001, 20UPGYZ2000002, 20UPGYZ2000004, 20UPGYZ3000001, 20UPGYZ3000002, 20UPGYZ3000003, 20UPGYZ3000004, 20UPGYZ3000005, 20UPGYZ3000006, 20UPGYZ3000007, 20UPGYZ3000008, 20UPGYZ3000009, 20UPGYZ3000010, 20UPGYZ3000011, 20UPGYZ3000012, 20UPGYZ3000013, 20UPGYZ3000014, 20UPGYZ3000015, 20UPGYZ3000016, 20UPGYZ3000017, 20UPGYZ3000018, 20UPGYZ3000019, 20UPGYZ3000020, 20UPGYZ3000021, 20UPGYZ3000022, 20UPGYZ3000023, 20UPGYZ3000024, 20UPGYZ3000025, 20UPGYZ3000026, 20UPGYZ3000027, 20UPGYZ3000028, 20UPGYZ3000029, 20UPGYZ3000030, 20UPGYZ3000031, 20UPGYZ3000032, 20UPGYZ3000033, 20UPGYZ3000034, 20UPGYZ3000035, 20UPGYZ3000036, 20UPGYZ3000037, 20UPGYZ3000038, 20UPGYZ3000039, 20UPGYZ3000040, 20UPGYZ3000041, 20UPGYZ3000042, 20UPGYZ3000043, 20UPGYZ3000044, 20UPGYZ3000045, 20UPGYZ3000046, 20UPGYZ3000047, 20UPGYZ3000048, 20UPGYZ3000049, 20UPGYZ3000050, 20UPGYZ3000051, 20UPGYZ3000052, 20UPGYZ3000053)
+ZZ: test chip monika - test chip (20UPGZZ0000001, 20UPGZZ0000002, 20UPGZZ0000012, 20UPGZZ0000013, 20UPGZZ0000014, 20UPGZZ0000015, 20UPGZZ0000016, 20UPGZZ0001001, 20UPGZZ0001002, 20UPGZZ0001003, 20UPGZZ0001004, 20UPGZZ0001005, 20UPGZZ0001006, 20UPGZZ0001007, 20UPGZZ0001008, 20UPGZZ0001009, 20UPGZZ0001010, 20UPGZZ0001011, 20UPGZZ0001012, 20UPGZZ0001013, 20UPGZZ0100001, 20UPGZZ0100002, 20UPGZZ0100003, 20UPGZZ1000001, 20UPGZZ1000002, 20UPGZZ1000003, 20UPGZZ1000004, 20UPGZZ1100001, 20UPGZZ1100002, 20UPGZZ1100003, 20UPGZZ1100004, 20UPGZZt000001, 20UPGZZty00001)
+X1: Module - Dummy quad module (20UPGX10000001, 20UPGX10099998, 20UPGX10268255, 20UPGX12110040, 20UPGX12110055, 20UPGX12110397, 20UPGX12901105, 20UPGX19110133, 20UPGX19110134, 20UPGX19110135, 20UPGX19110136, 20UPGX19110154, 20UPGX19110159, 20UPGX19110160, 20UPGX19110217, 20UPGX19110218, 20UPGX19110219, 20UPGX19110220, 20UPGX19110230, 20UPGX19110334, 20UPGX19110336, 20UPGX19110388, 20UPGX19110438, 20UPGX19110502, 20UPGX19110503, 20UPGX19110504, 20UPGX19110505, 20UPGX19110507, 20UPGX19110508, 20UPGX19110541, 20UPGX19110542, 20UPGX19110543, 20UPGX19110544, 20UPGX19210365, 20UPGX19210367, 20UPGX19910047, 20UPGX19910048, 20UPGX19910057, 20UPGX19910063, 20UPGX19910113, 20UPGX19910114, 20UPGX19910115, 20UPGX19910463, 20UPGX19910510, 20UPGX19910511, 20UPGX19910539, 20UPGX19910548)
+MQ: ModuleSiteQualification - Module Site Qualification OBJECT (20UPGMQ0000001, 20UPGMQ0000002, 20UPGMQ0000003, 20UPGMQ0000005, 20UPGMQ0000006, 20UPGMQ0000007, 20UPGMQ0000008, 20UPGMQ0000009, 20UPGMQ0000010, 20UPGMQ0000011, 20UPGMQ0000013, 20UPGMQ0000014, 20UPGMQ0000015, 20UPGMQ0000016, 20UPGMQ0000017, 20UPGMQ0000018, 20UPGMQ0000019, 20UPGMQ0000020, 20UPGMQ0000021, 20UPGMQ0000022, 20UPGMQ0000023, 20UPGMQ0000024, 20UPGMQ0000026, 20UPGMQ0000027, 20UPGMQ0000028, 20UPGMQ0000029, 20UPGMQ0000030, 20UPGMQ0000031, 20UPGMQ0000032, 20UPGMQ0000035)
+FX: Front-end Chip - Tutorial FE chip (20UPGFX0009233, 20UPGFX0009234, 20UPGFX0009249, 20UPGFX0009250, 20UPGFX0009251, 20UPGFX0009252, 20UPGFX0009265, 20UPGFX0009266, 20UPGFX0009267, 20UPGFX0009489, 20UPGFX0009490, 20UPGFX0009505, 20UPGFX0009506, 20UPGFX0009507, 20UPGFX0009508, 20UPGFX0009509, 20UPGFX0009510, 20UPGFX0009511, 20UPGFX0009512, 20UPGFX0009513, 20UPGFX2990001)
+TT: test module - OB module (20UPGTT0000007, 20UPGTT0000008, 20UPGTT0000009, 20UPGTT1000001, 20UPGTT1012345, 20UPGTT2000002, 20UPGTT2010001, 20UPGTTA000002, 20UPGTTA0x1F23, 20UPGTTB000001, 20UPGTTB000002)
+KW: Front-end Chip - ITkpix_V1 (20UPGKW0000001, 20UPGKW0000002, 20UPGKW0000003, 20UPGKW0000004, 20UPGKW0000005, 20UPGKW0000006, 20UPGKW0000007, 20UPGKW0000008, 20UPGKW0000101, 20UPGKW0000102, 20UPGKW0099999)
+ZS: OB Loaded Module Cell - Dummy (20UPBZS0000001, 20UPBZS0000002, 20UPBZS0000003, 20UPBZS0000004, 20UPBZS0000005, 20UPBZS0000006, 20UPBZS0000007, 20UPBZS0000008, 20UPBZS0000009, 20UPBZS0000010, 20UPBZS0000011)
+G9: Bare Module - Digital quad bare module (20UPGG92901054, 20UPGG92901055, 20UPGG92901056, 20UPGG92901057, 20UPGG92901058, 20UPGG92901059, 20UPGG92901060, 20UPGG92901105)
+CC: Coffee club component - Common type (20UPGCC0000001, 20UPGCC0000002, 20UPGCC0000003, 20UPGCC0000004, 20UPGCC0000005)
+RA: Front-end Chip - RD53A (20UPGRA0000730, 20UPGRA0000731)
+MO: Module (20UPBMO0000007, 20UPBMO0000008, 20UPBMO0000009)
+KG: Bare Module - Quad bare module (20UPGKGW999998, 20UPGKGW999999)
+GS: Glue - SE4445 (20UPIGS270824B, 20UPIGS270824C)
+TR: OB Truss - Dummy (20UPBTR0000001, 20UPBTR0000002)
+R1: Module - Dummy quad module (20UPGR10021016, 20UPGR10099999)
+30: OEC Evaporator - EV_L3 (20UPE300000001, 20UPE300000002)
+3D: Module (20UPG3D0000010)
+R4: Module - Dummy triplet L0 ring0 module (20UPIR40099999)
+TC: Triplet Shipping Create (20UPGTC0000001)
+40: OEC Evaporator - EV_L4 (20UPE400000001)
+00: Sensor Tile (20UPI000000007, 20UPI000000008, 20UPI000000009, 20UPI000000010, 20UPI000000011, 20UPI000000034, 20UPI000000035, 20UPI000000036, 20UPI000000041, 20UPI000000042, 20UPI000000043, 20UPI000000044, 20UPI000000045, 20UPI000000046, 20UPI000000047, 20UPI000000048, 20UPI000000049, 20UPI000000050, 20UPI000000051, 20UPI000000052, 20UPI000000053, 20UPI000000057, 20UPI000000058, 20UPI000000059, 20UPI000000063, 20UPI000000066, 20UPI000000067, 20UPI000000071, 20UPI000000072, 20UPI000000074, 20UPI000000075, 20UPI000000076, 20UPI000000077, 20UPI000000082, 20UPI000000083, 20UPI000000084, 20UPI000000085, 20UPI000000086, 20UPI000000089, 20UPI000000090, 20UPI000000091, 20UPI000000092, 20UPI000000093, 20UPI000000094, 20UPI000000095, 20UPI000000096, 20UPI000000097, 20UPI000000098, 20UPI000000099)
+# exists, not defined well
+QT: PP1 Connector - Dummy (20UPBQT1000001)
+XT
+XC
+SU
+S8
+Ob
+PB
+BR
+M1
+RQ
+S2
+SH
+S3
+XS
+BT
+lp
+P5
+LS
+HT
+RS
+LB
+XM
+XP
+PQ
+BS
+XB
+P1
+MC
+RV
+SS
+HR
+EV
+CP
+RR
+W0
+BH
+Os
+W7
+W3
+W2
+W1
+"""
+
 yy_identifiers = {
     # pixel modules and subcomponents
     "FE_chip_wafer": ("FW", "PG"),
@@ -771,6 +844,54 @@ yy_identifiers = {
     "Local_support_handling_frame_box": ("LB", "PE", "PI", "PB"),
     "High_voltage_group": ("VG", "PE", "PI", "PB"),
     "Serial_powering_scheme": ("SP", "PE", "PI", "PB"),
+    # dummy local supports
+    "Dummy_IS_capillary": ("YA", "PI"),
+    "Dummy_IS_end_tube": ("YB", "PI"),
+    "Dummy_IS_cooling_tube": ("YD", "PI"),
+    "Dummy_IS_bare_local_support_stave": ("YE", "PI"),
+    "Dummy_IS_bare_local_support_ring": ("YF", "PI"),
+    "Dummy_IS_ring_local_support_assembly_loaded_ring": ("YG", "PI"),
+    "Dummy_IS_barrel_stave_assembly_loaded_stave": ("YH", "PI"),
+    "Dummy_OB_Base_Block": ("ZA", "PB"),
+    "Dummy_OB_Cooling_Block": ("ZB", "PB"),
+    "Dummy_OB_TPG_Tile": ("ZC", "PB"),
+    "Dummy_OB_Local_Support_Inserts": ("ZD", "PB"),
+    "Dummy_OB_Gusset": ("ZE", "PB"),
+    "Dummy_OB_Truss": ("ZF", "PB"),
+    "Dummy_OB_Half_Ring_Shell": ("ZG", "PB"),
+    "Dummy_OB_End_of_longeron_Bracket_End_Gusset": ("ZH", "PB"),
+    "Dummy_OB_Pipe_Support": ("ZI", "PB"),
+    "Dummy_OB_Evaporator_Sleeves": ("ZJ", "PB"),
+    "Dummy_OB_Cooling_Pipe_IHR": ("ZK", "PB"),
+    "Dummy_OB_Cooling_Pipe_Longeron": ("ZL", "PB"),
+    "Dummy_OB_Functional_Pipe_for_IHR": ("ZM", "PB"),
+    "Dummy_OB_Functional_Pipe_for_Longeron": ("ZN", "PB"),
+    "Dummy_OB_End_of_longeron_Support": ("ZO", "PB"),
+    "Dummy_OB_Bare_Module_Cell": ("ZP", "PB"),
+    "Dummy_OB_Functional_IHR": ("ZQ", "PB"),
+    "Dummy_OB_Functional_Longeron": ("ZR", "PB"),
+    "Dummy_OB_Loaded_Module_Cell": ("ZS", "PB"),
+    "Dummy_OB_Loaded_IHR": ("ZT", "PB"),
+    "Dummy_OB_Loaded_Longeron": ("ZU", "PB"),
+    "Dummy_OB_IHR_Handling_Frame": ("ZV", "PB"),
+    "Dummy_OB_Longeron_Handling_Frame": ("ZW", "PB"),
+    "Dummy_OB_Bare_Cell_Transport_Box": ("ZX", "PB"),
+    "Dummy_OEC_Trapezoids": ("YI", "PE"),
+    "Dummy_OEC_Electrical break": ("YJ", "PE"),
+    "Dummy_OEC_Inner_Rim_Insert": ("YK", "PE"),
+    "Dummy_OEC_Outer_Rim_mounting_lugs": ("YL", "PE"),
+    "Dummy_OEC_Inner_Rim_Closeout": ("YM", "PE"),
+    "Dummy_OEC_Outer_Rim_Closeout": ("YN", "PE"),
+    "Dummy_OEC_Pipe_Closeout_support_closeout": ("YO", "PE"),
+    "Dummy_OEC_Half_Sandwich": ("YP", "PE"),
+    "Dummy_OEC_Evaporator": ("YQ", "PE"),
+    "Dummy_OEC_Bare_half_ring_assembly_Bare_support": ("YR", "PE"),
+    "Dummy_OEC_Loaded_local_support_loaded_support": ("YS", "PE"),
+    "Dummy_OEC_Handling_frame_support_frame": ("YT", "PE"),
+    "Dummy_OEC_Transport/storage_box_support_box": ("YU", "PE"),
+    "Dummy_Local_support_handling_frame_box": ("YV", "PE", "PI", "PB"),
+    "Dummy_High_voltage_group": ("YW", "PE", "PI", "PB"),
+    "Dummy_Serial_powering_scheme": ("YX", "PE", "PI", "PB"),
     # services
     "Optoboard": ("OB", "PG"),
     "Optoboard_termination_board": ("OT", "PG"),  # codespell:ignore
@@ -811,9 +932,52 @@ yy_identifiers = {
     "Type_3_HV_cable": ("P3", "PI", "PB", "PE"),
     "Type_3_LV_cable": ("L3", "PI", "PB", "PE"),
     "MOPS_cable": ("M3", "PG"),
-    "TiLoc": ("TL", "PG"),
-    "OPTO_MOP": ("OM", "PG"),
+    "TiLock": ("TL", "PG"),
+    "OPTO_MOPS": ("OM", "PG"),
     "PP3_power": ("3P", "PG"),
+    # Dummy services
+    "Dummy_Optoboard": ("Q1", "PG"),
+    "Dummy_Optoboard_termination_board": ("Q2", "PG"),  # codespell:ignore
+    "Dummy_Optobox": ("Q3", "PG"),
+    "Dummy_Optobox_powerbox": ("Q4", "PG"),
+    "Dummy_Optobox_connector_board": ("Q5", "PG"),
+    "Dummy_Optobox_optical_fan_out": ("Q6", "PG"),
+    "Dummy_Optopanel": ("Q7", "PG"),
+    "Dummy_Optopanel_cooling_plate": ("Q8", "PG"),
+    "Dummy_Optobox_powerboard": ("Q9", "PG"),
+    # "Dummy_LpGBT_chip": ("", "PG"), # FIXME: missing dummy
+    "Dummy_GBCR_chip": ("QA", "PG"),
+    "Dummy_Vtrx_module": ("QB", "PG"),
+    "Dummy_Bpol2V5_chip": ("QC", "PG"),
+    "Dummy_Bpol2V5_carrier_board": ("QD", "PG"),
+    "Dummy_Bpol12V_chip": ("QE", "PG"),
+    "Dummy_MOPS_chip": ("QF", "PG"),
+    "Dummy_Power_cables": ("QG", "PG"),
+    "Dummy_CAN_bus_cable": ("QH", "PG"),
+    "Dummy_Pigtail": ("QI", "PB"),
+    "Dummy_Rigid_flex": ("QK", "PI", "PB"),  # FIXME: "QJ" skipped
+    "Dummy_Data_PP0": ("QL", "PI", "PE"),  # FIXME: typo in table 3
+    "Dummy_Power_pigtail": ("QM", "PI", "PE"),
+    "Dummy_Power_bustape": ("QN", "PI", "PB", "PE"),
+    # "Dummy_Bare_bustape": ("", "PE"), # FIXME: missing dummy
+    "Dummy_Pigtail_panel": ("QO", "PB"),
+    "Dummy_PP0": ("QP", "PI"),  # FIXME: conflict with Triplet_L0_R0_PC
+    "Dummy_Finger": ("QV", "PI"),
+    "Dummy_Data_link ": ("QQ", "PI", "PB", "PE"),
+    "Dummy_Power_DCS_line": ("QR", "PI", "PB", "PE"),
+    "Dummy_Environmental_link": ("QS", "PI", "PB", "PE"),
+    "Dummy_PP1_connector": ("QT", "PI", "PB", "PE"),
+    "Dummy_PP1_connector_pieces_segments": ("QU", "PI", "PB", "PE"),
+    # "Dummy_strain_relief": ("", "PB"), # FIXME: missing dummy
+    "Dummy_Type_2_power_cable": ("QW", "PI", "PB", "PE"),
+    "Dummy_Type_2_optobox_cable": ("QX", "PI", "PB", "PE"),
+    "Dummy_PP2_box": ("QY", "PG"),
+    "Dummy_Type_3_HV_cable": ("QZ", "PI", "PB", "PE"),
+    "Dummy_Type_3_LV_cable": ("Q1", "PI", "PB", "PE"),
+    "Dummy_MOPS_cable": ("Q2", "PG"),
+    "Dummy_TiLock": ("Q3", "PG"),
+    "Dummy_OPTO_MOPS": ("Q4", "PG"),
+    "Dummy_PP3_power": ("Q5", "PG"),
 }
 
 subproject_codes = {
@@ -956,6 +1120,54 @@ identifiers = Switch(
         "Local_support_handling_frame_box": local_supports_frame_box,
         "High_voltage_group": local_supports,
         "Serial_powering_scheme": local_supports,
+        # dummy local supports
+        "Dummy_IS_capillary": local_supports_is,
+        "Dummy_IS_end_tube": local_supports_is,
+        "Dummy_IS_cooling_tube": local_supports_is,
+        "Dummy_IS_bare_local_support_stave": local_supports_is,
+        "Dummy_IS_bare_local_support_ring": local_supports_is,
+        "Dummy_IS_ring_local_support_assembly_loaded_ring": local_supports,
+        "Dummy_IS_barrel_stave_assembly_loaded_stave": local_supports,
+        "Dummy_OB_Base_Block": local_supports,
+        "Dummy_OB_Cooling_Block": local_supports,
+        "Dummy_OB_TPG_Tile": local_supports,
+        "Dummy_OB_Local_Support_Inserts": local_supports,
+        "Dummy_OB_Gusset": local_supports,
+        "Dummy_OB_Truss": local_supports,
+        "Dummy_OB_Half_Ring_Shell": local_supports,
+        "Dummy_OB_End_of_longeron_Bracket_End_Gusset": local_supports,
+        "Dummy_OB_Pipe_Support": local_supports,
+        "Dummy_OB_Evaporator_Sleeves": local_supports,
+        "Dummy_OB_Cooling_Pipe_IHR": local_supports,
+        "Dummy_OB_Cooling_Pipe_Longeron": local_supports,
+        "Dummy_OB_Functional_Pipe_for_IHR": local_supports,
+        "Dummy_OB_Functional_Pipe_for_Longeron": local_supports,
+        "Dummy_OB_End_of_longeron_Support": local_supports,
+        "Dummy_OB_Bare_Module_Cell": local_supports,
+        "Dummy_OB_Functional_IHR": local_supports_ihr,
+        "Dummy_OB_Functional_Longeron": local_supports_longeron,
+        "Dummy_OB_Loaded_Module_Cell": loaded_local_supports_ob_module,
+        "Dummy_OB_Loaded_IHR": local_supports,
+        "Dummy_OB_Loaded_Longeron": local_supports,
+        "Dummy_OB_IHR_Handling_Frame": local_supports,
+        "Dummy_OB_Longeron_Handling_Frame": local_supports,
+        "Dummy_OB_Bare_Cell_Transport_Box": local_supports,
+        "Dummy_OEC_Trapezoids": local_supports,
+        "Dummy_OEC_Electrical break": local_supports,
+        "Dummy_OEC_Inner_Rim_Insert": local_supports,
+        "Dummy_OEC_Outer_Rim_mounting_lugs": local_supports,
+        "Dummy_OEC_Inner_Rim_Closeout": local_supports,
+        "Dummy_OEC_Outer_Rim_Closeout": local_supports,
+        "Dummy_OEC_Pipe_Closeout_support_closeout": local_supports,
+        "Dummy_OEC_Half_Sandwich": local_supports,
+        "Dummy_OEC_Evaporator": local_supports,
+        "Dummy_OEC_Bare_half_ring_assembly_Bare_support": local_supports,
+        "Dummy_OEC_Loaded_local_support_loaded_support": local_supports,
+        "Dummy_OEC_Handling_frame_support_frame": local_supports,
+        "Dummy_OEC_Transport/storage_box_support_box": local_supports,
+        "Dummy_Local_support_handling_frame_box": local_supports_frame_box,
+        "Dummy_High_voltage_group": local_supports,
+        "Dummy_Serial_powering_scheme": local_supports,
         # services
         "Optoboard": optoboard,
         "Optoboard_termination_board": termination_board,  # OB Type-1 Termination Board (FIXME: only PG, no PB)
@@ -995,7 +1207,7 @@ identifiers = Switch(
             pb=pb_type1_data
         ),  # IS Type-1, (FIXME: only PB/PI needed, not PE)
         "Power_DCS_line": subproject_switch(
-            pb=pb_type1_power
+            pe=pe_type1, pb=pb_type1_power
         ),  # IS Type-1, (FIXME: only PB/PI needed, not PE)
         "Environmental_link": Error,  # Type-0 and Type-1 cable (FIXME: not defined?)
         "PP1_connector": subproject_switch(pe=pe_type1),  # FIXME: not defined well)
@@ -1011,6 +1223,60 @@ identifiers = Switch(
         "TiLock": type3,
         "OPTO_MOPS": type3,
         "PP3_power": type4,
+        # Dummy services
+        "Dummy_Optoboard": optoboard,
+        "Dummy_Optoboard_termination_board": termination_board,  # OB Type-1 Termination Board (FIXME: only PG, no PB)
+        "Dummy_Optobox": optobox,
+        "Dummy_Optobox_powerbox": optobox,
+        "Dummy_Optobox_connector_board": optobox_powerboard_connector,
+        "Dummy_Optobox_optical_fan_out": optobox,
+        "Dummy_Optopanel": Error,  # FIXME
+        "Dummy_Optopanel_cooling_plate": Error,  # FIXME
+        "Dummy_Optobox_powerboard": optobox_powerboard_connector,
+        "Dummy_GBCR_chip": Error,  # FIXME
+        "Dummy_Vtrx_module": Error,  # FIXME
+        "Dummy_Bpol2V5_chip": Error,  # FIXME
+        "Dummy_Bpol2V5_carrier_board": Error,  # FIXME
+        "Dummy_Bpol12V_chip": Error,  # FIXME
+        "Dummy_MOPS_chip": mops_chip,  # FIXME: phrasing in the document is awful
+        "Dummy_Power_cables": Error,  # FIXME
+        "Dummy_CAN_bus_cable": canbus,
+        "Dummy_Pigtail": subproject_switch(
+            pb=pb_type0_cable
+        ),  # IS Type-0  (FIXME: no PI supported)
+        "Dummy_Rigid_flex": subproject_switch(pb=pb_type0_pp0),  # IS Type-0
+        "Dummy_Data_PP0": subproject_switch(
+            pe=pe_type0_data
+        ),  # IS Type-0  # OB Type-1 Inclined PCB??? (FIXME: not PB)
+        "Dummy_Power_pigtail": subproject_switch(
+            pe=pe_type0_power
+        ),  # IS Type-0  # OE Type-0
+        "Dummy_Power_bustape": subproject_switch(
+            pe=pe_type0_power
+        ),  # FIXME: only PE needed, not PI/PB
+        "Dummy_Pigtail_panel": pb_type0_cable,
+        "Dummy_PP0": subproject_switch(pi=pi_type0_pp0),  # IS only
+        "Dummy_Finger": Error,  # FIXME: not used/defined?
+        "Dummy_Data_link ": subproject_switch(
+            pb=pb_type1_data
+        ),  # IS Type-1, (FIXME: only PB/PI needed, not PE)
+        "Dummy_Power_DCS_line": subproject_switch(
+            pe=pe_type1, pb=pb_type1_power
+        ),  # IS Type-1, (FIXME: only PB/PI needed, not PE)
+        "Dummy_Environmental_link": Error,  # Type-0 and Type-1 cable (FIXME: not defined?)
+        "Dummy_PP1_connector": subproject_switch(
+            pe=pe_type1
+        ),  # FIXME: not defined well)
+        "Dummy_PP1_connector_pieces_segments": subproject_switch(),  # FIXME: not defined well)
+        "Dummy_Type_2_power_cable": type2,
+        "Dummy_Type_2_optobox_cable": type2,
+        "Dummy_PP2_box": type2,
+        "Dummy_Type_3_HV_cable": type3,
+        "Dummy_Type_3_LV_cable": type3,
+        "Dummy_MOPS_cable": type3,
+        "Dummy_TiLock": type3,
+        "Dummy_OPTO_MOPS": type3,
+        "Dummy_PP3_power": type4,
     },
     # default=Bytes(7),
 )

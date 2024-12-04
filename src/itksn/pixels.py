@@ -9,6 +9,7 @@ from construct import (
     Construct,
     Error,
     Pointer,
+    Select,
     Struct,
     Switch,
 )
@@ -309,7 +310,9 @@ termination_board = Struct(
 )
 
 optobox_powerboard_connector = Struct(
-    "production_version" / Const(b"2"), "orientation" / orientation, "number" / Bytes(5)
+    "production_version" / Select(Const(b"2"), Const(b"3")),
+    "orientation" / orientation,
+    "number" / Bytes(5),
 )
 
 optobox = Struct(

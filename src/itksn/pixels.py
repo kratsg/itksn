@@ -138,7 +138,13 @@ bare_module = Struct(
 )
 
 pcb_loading_site = EnumStr(
-    Bytes(1), Oslo=b"2", TOPRO=b"5", NORBIT=b"6", CERN=b"7", unloaded=b"9"
+    Bytes(1),
+    outdated=b"0",
+    Oslo=b"2",
+    TOPRO=b"5",
+    NORBIT=b"6",
+    CERN=b"7",
+    unloaded=b"9",
 )
 
 pcb_reception_site = EnumStr(
@@ -344,7 +350,40 @@ canbus = Struct(
     "number" / Bytes(5),
 )
 
-is_cable = Struct(
+type0_component: dict[str, dict[tuple[str, str], str]] = {
+    "Data_PP0": {  # "DP"
+        ("Barrel_Triplet", "NA"): "L0 Barrel Data Flex",
+        ("Barrel_Quad", "F1"): "L1 Barrel Data Flex",
+        ("Barrel_Quad", "F2"): "L1 Barrel Data Flex",
+        ("Barrel_Quad", "F3"): "L1 Barrel Data Flex",
+        ("Barrel_Quad", "F4"): "L1 Barrel Data Flex",
+        ("Ring_Triplet", "F1"): "R0 Data Flex",
+        ("Ring_Triplet", "F2"): "R0 Data Flex",
+        ("Ring_Triplet", "F3"): "R0 Data Flex",
+        ("Ring_Triplet", "F4"): "R0.5 Data Flex",
+        ("Ring_Triplet", "F5"): "R0.5 Data Flex",
+        ("Ring_Triplet", "F6"): "R0.5 Data Flex",
+    },
+    "Power_pigtail": {  # "PP"
+        ("Barrel_Triplet", "NA"): "L0 Barrel Power Flex",
+        ("Barrel_Quad", "F1"): "L1 Barrel Power Flex",
+        ("Barrel_Quad", "F2"): "L1 Barrel Power Flex",
+        ("Ring_Triplet", "F1"): "R0 Power",
+        ("Ring_Triplet", "F2"): "R0 Power Jumper",
+    },
+    "Rigid_flex": {  # "RF"
+        ("Ring_Both", "F3"): "Coupled Ring R0/R1",
+        ("Ring_Quad", "F3"): "Quad Ring R1",
+        ("Ring_Triplet", "F2"): "Intermediate Ring",
+    },
+    "Pigtail": {  # "PG"
+        ("Ring_Quad", "F3"): "Quad Module Z-Ray Flex",
+        ("Ring_Both", "F1"): "Type-0 to PP0",
+        ("Ring_Both", "F2"): "Type-0 to PP0",
+    },
+}
+
+is_type0_cable = Struct(
     "production_version"
     / EnumStr(
         Bytes(1),
@@ -369,9 +408,37 @@ is_cable = Struct(
         F2=b"2",
         F3=b"3",
         F4=b"4",
+        F5=b"5",
+        F6=b"6",
+    ),
+    "component"
+    / Computed(
+        lambda ctx: type0_component[ctx._.subproject_code][(ctx.flavor, ctx.subflavor)],  # type: ignore[arg-type,return-value]
     ),
     "number" / Bytes(4),
 )
+
+is_type1_cable = Struct(
+    "production_version"
+    / EnumStr(
+        Bytes(1),
+        Pre_production=b"0",
+        Production=b"1",
+        Dummy=b"9",
+    ),
+    "flavor"
+    / EnumStr(
+        Bytes(1),
+        L0L1=b"0",
+        L02xL1=b"1",
+        Coupled_Ring=b"2",
+        Intermediate_Ring=b"3",
+        QR1=b"4",
+        QR2=b"5",
+    ),
+    "number" / Bytes(5),
+)
+
 
 pi_type0_pp0 = Struct(
     "production_version"
@@ -932,8 +999,8 @@ yy_identifiers = {
     "Pigtail_panel": ("PL", "PB"),
     "PP0": ("0P", "PI"),  # FIXME: conflict with Triplet_L0_R0_PC
     "Finger": ("FI", "PI"),
-    "Data_link ": ("D1", "PI", "PB", "PE"),
-    "Power_DCS_line": ("P1", "PI", "PB", "PE"),
+    "Type_1_Data_link ": ("D1", "PI", "PB", "PE"),
+    "Type_1_Power_DCS_line": ("P1", "PI", "PB", "PE"),
     "Environmental_link": ("E1", "PI", "PB", "PE"),
     "PP1_connector": ("1P", "PI", "PB", "PE"),
     "PP1_connector_pieces_segments": ("CS", "PI", "PB", "PE"),
@@ -975,8 +1042,8 @@ yy_identifiers = {
     "Dummy_Pigtail_panel": ("QO", "PB"),
     "Dummy_PP0": ("QP", "PI"),
     "Dummy_Finger": ("QV", "PI"),
-    "Dummy_Data_link ": ("QQ", "PI", "PB", "PE"),
-    "Dummy_Power_DCS_line": ("QR", "PI", "PB", "PE"),
+    "Dummy_Type_1_Data_link ": ("QQ", "PI", "PB", "PE"),
+    "Dummy_Type_1_Power_DCS_line": ("QR", "PI", "PB", "PE"),
     "Dummy_Environmental_link": ("QS", "PI", "PB", "PE"),
     "Dummy_PP1_connector": ("QT", "PI", "PB", "PE"),
     "Dummy_PP1_connector_pieces_segments": ("QU", "PI", "PB", "PE"),
@@ -1201,13 +1268,17 @@ identifiers = Switch(
         "CAN_bus_cable": canbus,
         # Type-0 and Type-1 cables below
         "Pigtail": subproject_switch(
-            pb=pb_type0_cable
+            pi=is_type0_cable, pb=pb_type0_cable
         ),  # IS Type-0  (FIXME: no PI supported)
-        "Rigid_flex": subproject_switch(pb=pb_type0_pp0),  # IS Type-0
+        "Rigid_flex": subproject_switch(
+            pi=is_type0_cable, pb=pb_type0_pp0
+        ),  # IS Type-0
         "Data_PP0": subproject_switch(
-            pe=pe_type0_data
+            pi=is_type0_cable, pe=pe_type0_data
         ),  # IS Type-0  # OB Type-1 Inclined PCB??? (FIXME: not PB)
-        "Power_pigtail": subproject_switch(pe=pe_type0_power),  # IS Type-0  # OE Type-0
+        "Power_pigtail": subproject_switch(
+            pi=is_type0_cable, pe=pe_type0_power
+        ),  # IS Type-0  # OE Type-0
         "Power_bustape": subproject_switch(
             pe=pe_type0_power
         ),  # FIXME: only PE needed, not PI/PB
@@ -1215,13 +1286,13 @@ identifiers = Switch(
         "Pigtail_panel": pb_type0_cable,
         "PP0": subproject_switch(pi=pi_type0_pp0),  # IS only
         "Finger": Error,  # FIXME: not used/defined?
-        "Data_link ": subproject_switch(
+        "Type_1_Data_link ": subproject_switch(
             pb=pb_type1_data
         ),  # IS Type-1, (FIXME: only PB/PI needed, not PE)
-        "Power_DCS_line": subproject_switch(
+        "Type_1_Power_DCS_line": subproject_switch(
             pe=pe_type1,
             pb=pb_type1_power,
-            pi=is_cable,
+            pi=is_type1_cable,
         ),  # IS Type-1, (FIXME: only PB/PI needed, not PE)
         "Environmental_link": Error,  # Type-0 and Type-1 cable (FIXME: not defined?)
         "PP1_connector": subproject_switch(pe=pe_type1),  # FIXME: not defined well)
@@ -1255,21 +1326,25 @@ identifiers = Switch(
         "Dummy_MOPS_chip": mops_chip,
         "Dummy_Power_cables": Error,
         "Dummy_CAN_bus_cable": canbus,
-        "Dummy_Pigtail": subproject_switch(pb=pb_type0_cable),  # IS Type-0
-        "Dummy_Rigid_flex": subproject_switch(pb=pb_type0_pp0),  # IS Type-0
+        "Dummy_Pigtail": subproject_switch(
+            pi=is_type0_cable, pb=pb_type0_cable
+        ),  # IS Type-0
+        "Dummy_Rigid_flex": subproject_switch(
+            pi=is_type0_cable, pb=pb_type0_pp0
+        ),  # IS Type-0
         "Dummy_Data_PP0": subproject_switch(
-            pe=pe_type0_data
+            pi=is_type0_cable, pe=pe_type0_data
         ),  # IS Type-0  # OB Type-1 Inclined PCB???
         "Dummy_Power_pigtail": subproject_switch(
-            pe=pe_type0_power
+            pi=is_type0_cable, pe=pe_type0_power
         ),  # IS Type-0  # OE Type-0
         "Dummy_Power_bustape": subproject_switch(pe=pe_type0_power),
         "Dummy_Pigtail_panel": pb_type0_cable,
         "Dummy_PP0": subproject_switch(pi=pi_type0_pp0),  # IS only
         "Dummy_Finger": Error,
-        "Dummy_Data_link ": subproject_switch(pb=pb_type1_data),  # IS Type-1,
-        "Dummy_Power_DCS_line": subproject_switch(
-            pe=pe_type1, pb=pb_type1_power, pi=is_cable
+        "Dummy_Type_1_Data_link ": subproject_switch(pb=pb_type1_data),  # IS Type-1,
+        "Dummy_Type_1_Power_DCS_line": subproject_switch(
+            pe=pe_type1, pb=pb_type1_power, pi=is_type1_cable
         ),  # IS Type-1,
         "Dummy_Environmental_link": Error,
         "Dummy_PP1_connector": subproject_switch(pe=pe_type1),

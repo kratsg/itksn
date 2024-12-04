@@ -269,7 +269,10 @@ loaded_local_supports_ob_module = Struct(
     "number" / Bytes(5),
 )
 
-local_supports_frame_box = Struct("type" / EnumStr(Bytes(1), Longeron=b"1", HR=b"2"))
+# FIXME: is the rest not defined?
+local_supports_frame_box = Struct(
+    "type" / EnumStr(Bytes(1), Longeron=b"1", HR=b"2"), "number" / Bytes(6)
+)
 
 orientation = EnumStr(
     Bytes(1),
@@ -424,6 +427,16 @@ pb_type0_pp0 = Struct(
                 Bytes(1), Short_L2=b"0", Long_L2=b"1", Short_L3_L4=b"2", Long_L3_L4=b"3"
             ),
             "Inclined": EnumStr(
+                Bytes(1),
+                L2_SP1=b"0",
+                L2_SP2=b"1",
+                L3_SP1=b"2",
+                L3_SP2=b"3",
+                L4_SP1=b"4",
+                L4_SP2=b"5",
+                Dummy=b"9",
+            ),
+            "Inclined_test_coupon": EnumStr(  # FIXME: not specified in Table 21
                 Bytes(1),
                 L2_SP1=b"0",
                 L2_SP2=b"1",

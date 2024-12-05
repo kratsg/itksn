@@ -130,6 +130,18 @@ def test_parse_digital_quad_module():
     assert parsed.subproject_code == "pixel_general"
     assert parsed.component_code == "Digital_quad_module"
     assert parsed.identifier.FE_chip_version == "ITkpix_v1p1"
+    assert parsed.identifier.PCB_manufacturer is None
+    assert parsed.identifier.number == b"101041"
+
+
+def test_parse_digital_quad_module_rd53a():
+    parsed = itksn.parse(b"20UPGR90101041")
+    assert parsed.atlas_project == "atlas_detector"
+    assert parsed.system_code == "phaseII_upgrade"
+    assert parsed.project_code == "pixel"
+    assert parsed.subproject_code == "pixel_general"
+    assert parsed.component_code == "Digital_quad_module"
+    assert parsed.identifier.FE_chip_version == "RD53A"
     assert parsed.identifier.PCB_manufacturer == "EPEC"
     assert parsed.identifier.number == b"01041"
 
@@ -163,7 +175,7 @@ def test_fe_chip():
     assert parsed.project_code == "pixel"
     assert parsed.subproject_code == "pixel_general"
     assert parsed.component_code == "FE_chip"
-    assert parsed.identifier.batch == "ITkpix_v1"
+    assert parsed.identifier.batch == "ITkpix_v2"
     assert parsed.identifier.wafer == 255
     assert parsed.identifier.row == 15
     assert parsed.identifier.column == 15

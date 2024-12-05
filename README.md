@@ -67,12 +67,12 @@ Container:
         manufacturer = b'9' (total 1)
         number = b'1234' (total 4)
 
-$ itksn parse 20UPGR40012345
+$ itksn parse 20UPGR90012345
 Container:
     atlas_project = (enum) atlas_detector b'20'
     system_code = (enum) phaseII_upgrade b'U'
     project_code = (enum) pixel_general b'PG'
-    subproject_code = (enum) Digital_quad_module b'R4'
+    subproject_code = (enum) Digital_quad_module b'R9'
     identifier = Container:
         FE_chip_version = (enum) RD53A b'0'
         reserved = b'0' (total 1)
@@ -116,6 +116,39 @@ obj = {
 }
 
 itksn.core.SerialNumberStruct.build(obj)  # b'20UPGFC0131224'
+```
+
+or even from python, one can parse
+
+```python
+import itksn
+
+results = itksn.parse(b"20UPGR90012345")
+assert results.atlas_project == "atlas_detector"
+assert results.project_code == "pixel"
+assert results.identifier.PCB_manufacturer == "Dummy"
+```
+
+or build
+
+```python
+from itksn.core import SerialNumberStruct
+
+sn = SerialNumberStruct.build(
+    {
+        "atlas_project": "atlas_detector",
+        "system_code": "phaseII_upgrade",
+        "project_code": "pixel",
+        "subproject_code": "pixel_general",
+        "component_code": "Digital_quad_module",
+        "identifier": {
+            "FE_chip_version": "RD53A",
+            "PCB_manufacturer": "Dummy",
+            "number": b"12345",
+        },
+    }
+)
+assert sn == b"20UPGR90012345"
 ```
 
 ## Installation

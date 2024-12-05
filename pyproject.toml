@@ -193,7 +193,7 @@ select = [
   "UP",          # pyupgrade
   "YTT",         # flake8-2020
 ]
-ignore = ["PLR", "E501"]
+ignore = ["PLR", "E501", "ISC001"]
 typing-modules = ["itksn.typing"]
 unfixable = ["T20", "F841"]
 isort.required-imports = ["from __future__ import annotations"]

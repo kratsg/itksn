@@ -179,3 +179,39 @@ def test_outer_endcap_data_pp0():
     assert parsed.identifier.layer == "L2"
     assert parsed.identifier.flavor == "ring611_Front"
     assert parsed.identifier.number == b"9999"
+
+
+def test_inner_system_pp1():
+    parsed = itksn.parse(b"20UPI1P1000002")
+    assert parsed.atlas_project == "atlas_detector"
+    assert parsed.system_code == "phaseII_upgrade"
+    assert parsed.project_code == "pixel"
+    assert parsed.subproject_code == "inner_pixel"
+    assert parsed.component_code == "PP1_connector"
+    assert parsed.identifier.production_version == "Pre_production"
+    assert parsed.identifier.glenair_part == "Type_2_Header"
+    assert parsed.identifier.number == b"0002"
+
+
+def test_inner_system_type1_power_L02xL1():
+    parsed = itksn.parse(b"20UPIP19100001")
+    assert parsed.atlas_project == "atlas_detector"
+    assert parsed.system_code == "phaseII_upgrade"
+    assert parsed.project_code == "pixel"
+    assert parsed.subproject_code == "inner_pixel"
+    assert parsed.component_code == "Type_1_Power_DCS_line"
+    assert parsed.identifier.production_version == "Dummy"
+    assert parsed.identifier.flavor == "L02xL1"
+    assert parsed.identifier.number == b"00001"
+
+
+def test_inner_system_type1_power_CR():
+    parsed = itksn.parse(b"20UPIP10200001")
+    assert parsed.atlas_project == "atlas_detector"
+    assert parsed.system_code == "phaseII_upgrade"
+    assert parsed.project_code == "pixel"
+    assert parsed.subproject_code == "inner_pixel"
+    assert parsed.component_code == "Type_1_Power_DCS_line"
+    assert parsed.identifier.production_version == "Prototype"
+    assert parsed.identifier.flavor == "Coupled_Ring"
+    assert parsed.identifier.number == b"00001"

@@ -22,22 +22,22 @@ triplet_assembly_site = EnumStr(
 )
 
 batch_number = {
-    0: b"RD53A",
-    1: b"ITkpix_v1",
-    2: b"ITkpix_v2",
-    3: b"ITkpix_v2",
-    4: b"ITkpix_v2",
-    5: b"ITkpix_v2",
-    6: b"ITkpix_v2",
-    7: b"ITkpix_v2",
-    8: b"ITkpix_v2",
-    9: b"ITkpix_v2",
-    10: b"ITkpix_v2",
-    11: b"ITkpix_v2",
-    12: b"ITkpix_v2",
-    13: b"ITkpix_v2",
-    14: b"ITkpix_v2",
-    15: b"ITkpix_v2",
+    0: "RD53A",
+    1: "ITkpix_v1",
+    2: "ITkpix_v2",
+    3: "ITkpix_v2",
+    4: "ITkpix_v2",
+    5: "ITkpix_v2",
+    6: "ITkpix_v2",
+    7: "ITkpix_v2",
+    8: "ITkpix_v2",
+    9: "ITkpix_v2",
+    10: "ITkpix_v2",
+    11: "ITkpix_v2",
+    12: "ITkpix_v2",
+    13: "ITkpix_v2",
+    14: "ITkpix_v2",
+    15: "ITkpix_v2",
 }
 
 fe_chip = Struct(

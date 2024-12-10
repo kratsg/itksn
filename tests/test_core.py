@@ -253,3 +253,17 @@ def test_inner_system_type0_barrel_triplet_data_flex():
     assert parsed.identifier.subflavor == "NA"
     assert parsed.identifier.number == b"0015"
     assert parsed.identifier.component == "L0 Barrel Data Flex"
+
+
+def test_inner_system_type0_quad_module_z_ray_flex():
+    parsed = itksn.parse(b"20UPIPG9300001")
+    assert parsed.atlas_project == "atlas_detector"
+    assert parsed.system_code == "phaseII_upgrade"
+    assert parsed.project_code == "pixel"
+    assert parsed.subproject_code == "inner_pixel"
+    assert parsed.component_code == "Pigtail"
+    assert parsed.identifier.production_version == "Dummy"
+    assert parsed.identifier.flavor == "Ring_Quad"
+    assert parsed.identifier.subflavor == "NA"
+    assert parsed.identifier.number == b"0001"
+    assert parsed.identifier.component == "Quad Module Z-Ray Flex"

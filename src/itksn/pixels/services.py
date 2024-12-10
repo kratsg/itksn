@@ -465,7 +465,7 @@ yy_identifiers = {
     "MOPS_chip": ("MP", "PG"),
     "Power_cables": ("OI", "PG"),
     "CAN_bus_cable": ("OD", "PG"),
-    "Pigtail": ("PG", "PB"),
+    "Pigtail": ("PG", "PI", "PB"),
     "Rigid_flex": ("RF", "PI", "PB"),
     "Data_PP0": ("DP", "PI", "PE"),
     "Power_pigtail": ("PP", "PI", "PE"),

@@ -239,3 +239,17 @@ def test_inner_system_type1_power_CR():
     assert parsed.identifier.production_version == "Prototype"
     assert parsed.identifier.flavor == "Coupled_Ring"
     assert parsed.identifier.number == b"00001"
+
+
+def test_inner_system_type0_barrel_triplet_data_flex():
+    parsed = itksn.parse(b"20UPIDP9000015")
+    assert parsed.atlas_project == "atlas_detector"
+    assert parsed.system_code == "phaseII_upgrade"
+    assert parsed.project_code == "pixel"
+    assert parsed.subproject_code == "inner_pixel"
+    assert parsed.component_code == "Data_PP0"
+    assert parsed.identifier.production_version == "Dummy"
+    assert parsed.identifier.flavor == "Barrel_Triplet"
+    assert parsed.identifier.subflavor == "NA"
+    assert parsed.identifier.number == b"0015"
+    assert parsed.identifier.component == "L0 Barrel Data Flex"

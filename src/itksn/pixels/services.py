@@ -138,7 +138,7 @@ is_type0_cable = Struct(
     ),
     "component"
     / Computed(
-        lambda ctx: type0_component[ctx._.subproject_code][(ctx.flavor, ctx.subflavor)],  # type: ignore[arg-type,return-value]
+        lambda ctx: type0_component[ctx._.component_code][(ctx.flavor, ctx.subflavor)],  # type: ignore[arg-type,return-value]
     ),
     "number" / Bytes(4),
 )

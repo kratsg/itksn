@@ -82,18 +82,19 @@ type0_component: dict[str, dict[tuple[str, str], str]] = {
         ("Barrel_Quad", "F2"): "L1 Barrel Data Flex",
         ("Barrel_Quad", "F3"): "L1 Barrel Data Flex",
         ("Barrel_Quad", "F4"): "L1 Barrel Data Flex",
+        ("Ring0_Triplet", "NA"): "R0 Data Flex",
         ("Ring0_Triplet", "F1"): "R0 Data Flex",
         ("Ring0_Triplet", "F2"): "R0 Data Flex",
-        ("Ring0_Triplet", "F3"): "R0 Data Flex",
-        ("Ring05_Triplet", "F1"): "R0.5 Data Flex",
-        ("Ring05_Triplet", "F2"): "R0.5 Data Flex",
+        ("Ring05_Triplet", "F3"): "R0.5 Data Flex",
+        ("Ring05_Triplet", "F4"): "R0.5 Data Flex",
+        ("Ring05_Triplet", "F5"): "R0.5 Data Flex",
     },
     "Power_pigtail": {  # "PP"
         ("Barrel_Triplet", "NA"): "L0 Barrel Power Flex",
         ("Barrel_Quad", "F1"): "L1 Barrel Power Flex",
         ("Barrel_Quad", "F2"): "L1 Barrel Power Flex",
-        ("Ring0_Triplet", "NA"): "R0 Power",
-        ("Ring0_Triplet", "F1"): "R0 Power Jumper",
+        ("Ring0_Triplet", "F6"): "R0 Power",
+        ("Ring0_Triplet", "F7"): "R0 Power Jumper",
     },
     "Rigid_flex": {  # "RF"
         ("Ring_Both", "NA"): "Coupled Ring R0/R1",
@@ -135,6 +136,7 @@ is_type0_cable = Struct(
         F4=b"4",
         F5=b"5",
         F6=b"6",
+        F7=b"7",
     ),
     "component"
     / Computed(

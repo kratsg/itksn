@@ -1,4 +1,4 @@
-# itksn v0.3.2
+# itksn v0.4.0
 
 Helper utility for parsing ITk Serial Numbers
 

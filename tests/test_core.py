@@ -241,29 +241,39 @@ def test_inner_system_type1_power_CR():
     assert parsed.identifier.number == b"00001"
 
 
-def test_inner_system_type0_barrel_triplet_data_flex():
-    parsed = itksn.parse(b"20UPIDP9000015")
-    assert parsed.atlas_project == "atlas_detector"
-    assert parsed.system_code == "phaseII_upgrade"
-    assert parsed.project_code == "pixel"
-    assert parsed.subproject_code == "inner_pixel"
-    assert parsed.component_code == "Data_PP0"
-    assert parsed.identifier.production_version == "Dummy"
-    assert parsed.identifier.flavor == "Barrel_Triplet"
-    assert parsed.identifier.subflavor == "NA"
-    assert parsed.identifier.number == b"0015"
-    assert parsed.identifier.component == "L0 Barrel Data Flex"
-
-
-def test_inner_system_type0_quad_module_z_ray_flex():
-    parsed = itksn.parse(b"20UPIPG9300001")
+@pytest.mark.parametrize(
+    ("serial_number", "component"),
+    [
+        ("20UPIPG000", "L0 Barrel Data Flex"),
+        ("20UPIPP000", "L0 Barrel Power Flex"),
+        ("20UPIPG011", "L1 Barrel Data Flex F1"),
+        ("20UPIPG012", "L1 Barrel Data Flex F2"),
+        ("20UPIPG013", "L1 Barrel Data Flex F3"),
+        ("20UPIPG014", "L1 Barrel Data Flex F4"),
+        ("20UPIPP011", "L1 Barrel Power Flex F1"),
+        ("20UPIPP012", "L1 Barrel Power Flex F2"),
+        ("20UPIRF050", "Coupled Ring"),
+        ("20UPIRF040", "Quad Ring"),
+        ("20UPIRF030", "Intermediate Ring"),
+        ("20UPIPG040", "Quad Module Z-Ray"),
+        ("20UPIPG021", "R0 Data Flex F1"),
+        ("20UPIPG022", "R0 Data Flex F2"),
+        ("20UPIPG023", "R0 Data Flex F3"),
+        ("20UPIPP051", "Triplet Power T-Rex"),
+        ("20UPIPP052", "Triplet Power Jumper"),
+        ("20UPIPG031", "R0.5 Data Flex F1"),
+        ("20UPIPG032", "R0.5 Data Flex F2"),
+        ("20UPIPG051", "Type-0 to PP0 F1"),
+        ("20UPIPG052", "Type-0 to PP0 F2"),
+    ],
+    ids=lambda values: values[1],
+)
+def test_inner_system_type0_services(serial_number, component):
+    parsed = itksn.parse(serial_number.encode("utf-8"))
     assert parsed.atlas_project == "atlas_detector"
     assert parsed.system_code == "phaseII_upgrade"
     assert parsed.project_code == "pixel"
     assert parsed.subproject_code == "inner_pixel"
     assert parsed.component_code == "Pigtail"
-    assert parsed.identifier.production_version == "Dummy"
-    assert parsed.identifier.flavor == "Ring_Quad"
-    assert parsed.identifier.subflavor == "NA"
-    assert parsed.identifier.number == b"0001"
-    assert parsed.identifier.component == "Quad Module Z-Ray Flex"
+    assert parsed.identifier.number == b"0000"
+    assert parsed.identifier.component == component

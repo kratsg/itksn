@@ -229,9 +229,6 @@ identifiers = Switch(
         "Rigid_flex": utils.subproject_switch(
             pi=services.is_type0_cable, pb=services.pb_type0_pp0
         ),  # IS Type-0
-        "Data_PP0": utils.subproject_switch(
-            pi=services.is_type0_cable, pe=services.pe_type0_data
-        ),  # IS Type-0  # OB Type-1 Inclined PCB??? (FIXME: not PB)
         "Power_pigtail": utils.subproject_switch(
             pi=services.is_type0_cable, pe=services.pe_type0_power
         ),  # IS Type-0  # OE Type-0
@@ -290,9 +287,6 @@ identifiers = Switch(
         "Dummy_Rigid_flex": utils.subproject_switch(
             pi=services.is_type0_cable, pb=services.pb_type0_pp0
         ),  # IS Type-0
-        "Dummy_Data_PP0": utils.subproject_switch(
-            pi=services.is_type0_cable, pe=services.pe_type0_data
-        ),  # IS Type-0  # OB Type-1 Inclined PCB???
         "Dummy_Power_pigtail": utils.subproject_switch(
             pi=services.is_type0_cable, pe=services.pe_type0_power
         ),  # IS Type-0  # OE Type-0

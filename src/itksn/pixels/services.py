@@ -76,18 +76,6 @@ canbus = Struct(
 )
 
 type0_component: dict[str, dict[tuple[str, str], str]] = {
-    "Data_PP0": {  # "DP"
-        ("Barrel_Triplet", "NA"): "L0 Barrel Data Flex",
-        ("Barrel_Quad", "F1"): "L1 Barrel Data Flex F1",
-        ("Barrel_Quad", "F2"): "L1 Barrel Data Flex F2",
-        ("Barrel_Quad", "F3"): "L1 Barrel Data Flex F3",
-        ("Barrel_Quad", "F4"): "L1 Barrel Data Flex F4",
-        ("Endcap_Ring0_Triplet", "F1"): "R0 Data Flex F1",
-        ("Endcap_Ring0_Triplet", "F2"): "R0 Data Flex F2",
-        ("Endcap_Ring0_Triplet", "F3"): "R0 Data Flex F3",
-        ("Endcap_Ring05_Triplet", "F1"): "R0.5 Data Flex F1",
-        ("Endcap_Ring05_Triplet", "F2"): "R0.5 Data Flex F2",
-    },
     "Power_pigtail": {  # "PP"
         ("Barrel_Triplet", "NA"): "L0 Barrel Power Flex",
         ("Barrel_Quad", "F1"): "L1 Barrel Power Flex F1",
@@ -101,7 +89,17 @@ type0_component: dict[str, dict[tuple[str, str], str]] = {
         ("Endcap_Ring05_Triplet", "NA"): "Intermediate Ring",
     },
     "Pigtail": {  # "PG"
+        ("Barrel_Triplet", "NA"): "L0 Barrel Data Flex",
+        ("Barrel_Quad", "F1"): "L1 Barrel Data Flex F1",
+        ("Barrel_Quad", "F2"): "L1 Barrel Data Flex F2",
+        ("Barrel_Quad", "F3"): "L1 Barrel Data Flex F3",
+        ("Barrel_Quad", "F4"): "L1 Barrel Data Flex F4",
         ("Endcap_Quad", "NA"): "Quad Module Z-Ray",
+        ("Endcap_Ring0_Triplet", "F1"): "R0 Data Flex F1",
+        ("Endcap_Ring0_Triplet", "F2"): "R0 Data Flex F2",
+        ("Endcap_Ring0_Triplet", "F3"): "R0 Data Flex F3",
+        ("Endcap_Ring05_Triplet", "F1"): "R0.5 Data Flex F1",
+        ("Endcap_Ring05_Triplet", "F2"): "R0.5 Data Flex F2",
         ("Endcap_Mixed", "F1"): "Type-0 to PP0 F1",
         ("Endcap_Mixed", "F2"): "Type-0 to PP0 F2",
     },
@@ -465,7 +463,6 @@ yy_identifiers = {
     "CAN_bus_cable": ("OD", "PG"),
     "Pigtail": ("PG", "PI", "PB"),
     "Rigid_flex": ("RF", "PI", "PB"),
-    "Data_PP0": ("DP", "PI", "PE"),
     "Power_pigtail": ("PP", "PI", "PE"),
     "Power_bustape": ("PB", "PI", "PB", "PE"),
     "Bare_bustape": ("NB", "PE"),
@@ -508,7 +505,6 @@ yy_identifiers = {
     "Dummy_CAN_bus_cable": ("QH", "PG"),
     "Dummy_Pigtail": ("QI", "PB"),
     "Dummy_Rigid_flex": ("QK", "PI", "PB"),  # FIXME: "QJ" skipped
-    "Dummy_Data_PP0": ("QL", "PI", "PE"),  # FIXME: typo in table 3
     "Dummy_Power_pigtail": ("QM", "PI", "PE"),
     "Dummy_Power_bustape": ("QN", "PI", "PB", "PE"),
     # "Dummy_Bare_bustape": ("", "PE"), # FIXME: missing dummy

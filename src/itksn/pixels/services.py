@@ -463,6 +463,7 @@ yy_identifiers = {
     "CAN_bus_cable": ("OD", "PG"),
     "Pigtail": ("PG", "PI", "PB"),
     "Rigid_flex": ("RF", "PI", "PB"),
+    "Data_PP0": ("DP", "PI", "PE"),
     "Power_pigtail": ("PP", "PI", "PE"),
     "Power_bustape": ("PB", "PI", "PB", "PE"),
     "Bare_bustape": ("NB", "PE"),
@@ -505,6 +506,7 @@ yy_identifiers = {
     "Dummy_CAN_bus_cable": ("QH", "PG"),
     "Dummy_Pigtail": ("QI", "PB"),
     "Dummy_Rigid_flex": ("QK", "PI", "PB"),  # FIXME: "QJ" skipped
+    "Dummy_Data_PP0": ("QL", "PI", "PE"),  # FIXME: typo in table 3
     "Dummy_Power_pigtail": ("QM", "PI", "PE"),
     "Dummy_Power_bustape": ("QN", "PI", "PB", "PE"),
     # "Dummy_Bare_bustape": ("", "PE"), # FIXME: missing dummy

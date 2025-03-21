@@ -78,55 +78,54 @@ canbus = Struct(
 type0_component: dict[str, dict[tuple[str, str], str]] = {
     "Data_PP0": {  # "DP"
         ("Barrel_Triplet", "NA"): "L0 Barrel Data Flex",
-        ("Barrel_Quad", "F1"): "L1 Barrel Data Flex",
-        ("Barrel_Quad", "F2"): "L1 Barrel Data Flex",
-        ("Barrel_Quad", "F3"): "L1 Barrel Data Flex",
-        ("Barrel_Quad", "F4"): "L1 Barrel Data Flex",
-        ("Ring0_Triplet", "NA"): "R0 Data Flex",
-        ("Ring0_Triplet", "F1"): "R0 Data Flex",
-        ("Ring0_Triplet", "F2"): "R0 Data Flex",
-        ("Ring05_Triplet", "F3"): "R0.5 Data Flex",
-        ("Ring05_Triplet", "F4"): "R0.5 Data Flex",
-        ("Ring05_Triplet", "F5"): "R0.5 Data Flex",
+        ("Barrel_Quad", "F1"): "L1 Barrel Data Flex F1",
+        ("Barrel_Quad", "F2"): "L1 Barrel Data Flex F2",
+        ("Barrel_Quad", "F3"): "L1 Barrel Data Flex F3",
+        ("Barrel_Quad", "F4"): "L1 Barrel Data Flex F4",
+        ("Endcap_Ring0_Triplet", "F1"): "R0 Data Flex F1",
+        ("Endcap_Ring0_Triplet", "F2"): "R0 Data Flex F2",
+        ("Endcap_Ring0_Triplet", "F3"): "R0 Data Flex F3",
+        ("Endcap_Ring05_Triplet", "F1"): "R0.5 Data Flex F1",
+        ("Endcap_Ring05_Triplet", "F2"): "R0.5 Data Flex F2",
     },
     "Power_pigtail": {  # "PP"
         ("Barrel_Triplet", "NA"): "L0 Barrel Power Flex",
-        ("Barrel_Quad", "F1"): "L1 Barrel Power Flex",
-        ("Barrel_Quad", "F2"): "L1 Barrel Power Flex",
-        ("Ring0_Triplet", "F6"): "R0 Power",
-        ("Ring0_Triplet", "F7"): "R0 Power Jumper",
+        ("Barrel_Quad", "F1"): "L1 Barrel Power Flex F1",
+        ("Barrel_Quad", "F2"): "L1 Barrel Power Flex F2",
+        ("Endcap_Mixed", "F1"): "Triplet Power T-Rex",
+        ("Endcap_Mixed", "F2"): "Triplet Power Jumper",
     },
     "Rigid_flex": {  # "RF"
-        ("Ring_Both", "NA"): "Coupled Ring R0/R1",
-        ("Ring_Quad", "NA"): "Quad Ring R1",
-        ("Ring0_Triplet", "NA"): "Intermediate Ring",
+        ("Endcap_Mixed", "NA"): "Coupled Ring",
+        ("Endcap_Quad", "NA"): "Quad Ring",
+        ("Endcap_Ring05_Triplet", "NA"): "Intermediate Ring",
     },
     "Pigtail": {  # "PG"
-        ("Ring_Quad", "NA"): "Quad Module Z-Ray Flex",
-        ("Ring_Both", "F1"): "Type-0 to PP0",
-        ("Ring_Both", "F2"): "Type-0 to PP0",
+        ("Endcap_Quad", "NA"): "Quad Module Z-Ray",
+        ("Endcap_Mixed", "F1"): "Type-0 to PP0 F1",
+        ("Endcap_Mixed", "F2"): "Type-0 to PP0 F2",
     },
 }
 
 is_type0_cable = Struct(
-    "production_version"
+    "stage"
     / EnumStr(
         Bytes(1),
         Pre_production=b"0",
         Production=b"1",
         Dummy=b"9",
     ),
-    "flavor"
+    "region"
     / EnumStr(
         Bytes(1),
         Barrel_Triplet=b"0",
         Barrel_Quad=b"1",
-        Ring0_Triplet=b"2",
-        Ring_Quad=b"3",
-        Ring_Both=b"4",
-        Ring05_Triplet=b"5",
+        Endcap_Ring0_Triplet=b"2",
+        Endcap_Ring05_Triplet=b"3",
+        Endcap_Quad=b"4",
+        Endcap_Mixed=b"5",
     ),
-    "subflavor"
+    "flavor"
     / EnumStr(
         Bytes(1),
         NA=b"0",
@@ -134,9 +133,6 @@ is_type0_cable = Struct(
         F2=b"2",
         F3=b"3",
         F4=b"4",
-        F5=b"5",
-        F6=b"6",
-        F7=b"7",
     ),
     "component"
     / Computed(

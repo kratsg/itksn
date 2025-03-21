@@ -241,29 +241,39 @@ def test_inner_system_type1_power_CR():
     assert parsed.identifier.number == b"00001"
 
 
-def test_inner_system_type0_barrel_triplet_data_flex():
-    parsed = itksn.parse(b"20UPIDP9000015")
+@pytest.mark.parametrize(
+    ("serial_number", "region", "component_code", "component"),
+    [
+        ("20UPIPG0000000", "Barrel_Triplet", "Pigtail", "L0 Barrel Data Flex"),
+        ("20UPIPP0000000", "Barrel_Triplet", "Power_pigtail", "L0 Barrel Power Flex"),
+        ("20UPIPG0110000", "Barrel_Quad", "Pigtail", "L1 Barrel Data Flex F1"),
+        ("20UPIPG0120000", "Barrel_Quad", "Pigtail", "L1 Barrel Data Flex F2"),
+        ("20UPIPG0130000", "Barrel_Quad", "Pigtail", "L1 Barrel Data Flex F3"),
+        ("20UPIPG0140000", "Barrel_Quad", "Pigtail", "L1 Barrel Data Flex F4"),
+        ("20UPIPP0110000", "Barrel_Quad", "Power_pigtail", "L1 Barrel Power Flex F1"),
+        ("20UPIPP0120000", "Barrel_Quad", "Power_pigtail", "L1 Barrel Power Flex F2"),
+        ("20UPIRF0500000", "Endcap_Mixed", "Rigid_flex", "Coupled Ring"),
+        ("20UPIRF0400000", "Endcap_Quad", "Rigid_flex", "Quad Ring"),
+        ("20UPIRF0300000", "Endcap_Ring05_Triplet", "Rigid_flex", "Intermediate Ring"),
+        ("20UPIPG0400000", "Endcap_Quad", "Pigtail", "Quad Module Z-Ray"),
+        ("20UPIPG0210000", "Endcap_Ring0_Triplet", "Pigtail", "R0 Data Flex F1"),
+        ("20UPIPG0220000", "Endcap_Ring0_Triplet", "Pigtail", "R0 Data Flex F2"),
+        ("20UPIPG0230000", "Endcap_Ring0_Triplet", "Pigtail", "R0 Data Flex F3"),
+        ("20UPIPP0510000", "Endcap_Mixed", "Power_pigtail", "Triplet Power T-Rex"),
+        ("20UPIPP0520000", "Endcap_Mixed", "Power_pigtail", "Triplet Power Jumper"),
+        ("20UPIPG0310000", "Endcap_Ring05_Triplet", "Pigtail", "R0.5 Data Flex F1"),
+        ("20UPIPG0320000", "Endcap_Ring05_Triplet", "Pigtail", "R0.5 Data Flex F2"),
+        ("20UPIPG0510000", "Endcap_Mixed", "Pigtail", "Type-0 to PP0 F1"),
+        ("20UPIPG0520000", "Endcap_Mixed", "Pigtail", "Type-0 to PP0 F2"),
+    ],
+)
+def test_inner_system_type0_services(serial_number, region, component_code, component):
+    parsed = itksn.parse(serial_number.encode("utf-8"))
     assert parsed.atlas_project == "atlas_detector"
     assert parsed.system_code == "phaseII_upgrade"
     assert parsed.project_code == "pixel"
     assert parsed.subproject_code == "inner_pixel"
-    assert parsed.component_code == "Data_PP0"
-    assert parsed.identifier.production_version == "Dummy"
-    assert parsed.identifier.flavor == "Barrel_Triplet"
-    assert parsed.identifier.subflavor == "NA"
-    assert parsed.identifier.number == b"0015"
-    assert parsed.identifier.component == "L0 Barrel Data Flex"
-
-
-def test_inner_system_type0_quad_module_z_ray_flex():
-    parsed = itksn.parse(b"20UPIPG9300001")
-    assert parsed.atlas_project == "atlas_detector"
-    assert parsed.system_code == "phaseII_upgrade"
-    assert parsed.project_code == "pixel"
-    assert parsed.subproject_code == "inner_pixel"
-    assert parsed.component_code == "Pigtail"
-    assert parsed.identifier.production_version == "Dummy"
-    assert parsed.identifier.flavor == "Ring_Quad"
-    assert parsed.identifier.subflavor == "NA"
-    assert parsed.identifier.number == b"0001"
-    assert parsed.identifier.component == "Quad Module Z-Ray Flex"
+    assert parsed.component_code == component_code
+    assert parsed.identifier.region == region
+    assert parsed.identifier.number == b"0000"
+    assert parsed.identifier.component == component

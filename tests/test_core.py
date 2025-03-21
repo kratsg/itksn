@@ -250,8 +250,8 @@ def test_inner_system_type1_power_CR():
         ("20UPIPG0120000", "Barrel_Quad", "Pigtail", "L1 Barrel Data Flex F2"),
         ("20UPIPG0130000", "Barrel_Quad", "Pigtail", "L1 Barrel Data Flex F3"),
         ("20UPIPG0140000", "Barrel_Quad", "Pigtail", "L1 Barrel Data Flex F4"),
-        ("20UPIPP0110000", "Barrel_Quad", "Pigtail", "L1 Barrel Power Flex F1"),
-        ("20UPIPP0120000", "Barrel_Quad", "Pigtail", "L1 Barrel Power Flex F2"),
+        ("20UPIPP0110000", "Barrel_Quad", "Power_pigtail", "L1 Barrel Power Flex F1"),
+        ("20UPIPP0120000", "Barrel_Quad", "Power_pigtail", "L1 Barrel Power Flex F2"),
         ("20UPIRF0500000", "Endcap_Mixed", "Rigid_flex", "Coupled Ring"),
         ("20UPIRF0400000", "Endcap_Quad", "Rigid_flex", "Quad Ring"),
         ("20UPIRF0300000", "Endcap_Ring05_Triplet", "Rigid_flex", "Intermediate Ring"),
@@ -266,7 +266,6 @@ def test_inner_system_type1_power_CR():
         ("20UPIPG0510000", "Endcap_Mixed", "Pigtail", "Type-0 to PP0 F1"),
         ("20UPIPG0520000", "Endcap_Mixed", "Pigtail", "Type-0 to PP0 F2"),
     ],
-    ids=lambda values: values[2],
 )
 def test_inner_system_type0_services(serial_number, region, component_code, component):
     parsed = itksn.parse(serial_number.encode("utf-8"))

@@ -52,7 +52,7 @@ def test_parse_bare_module():
     assert parsed.subproject_code == "pixel_general"
     assert parsed.component_code == "Digital_single_bare_module"
     assert parsed.identifier.FE_chip_version == "ITkpix_v1"
-    assert parsed.identifier.sensor_type == "Market_survey_sensor_tile"
+    assert parsed.identifier.Vendor_or_Thickness == "Leonardo"
     assert parsed.identifier.number == b"12345"
 
 

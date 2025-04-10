@@ -104,16 +104,21 @@ sensor = Struct(
 
 bare_module = Struct(
     "FE_chip_version" / fe_chip_version,
-    "sensor_type"
-    / EnumStr(
-        Bytes(1),
-        No_sensor=b"0",
-        Market_survey_sensor_tile=b"1",
-        L0_inner_pixel_3D_sensor_tile=b"2",
-        L0_inner_pixel_planar_sensor_tile=b"3",
-        L1_inner_pixel_quad_sensor_tile=b"4",
-        Outer_pixel_quad_sensor_tile=b"5",
-        Dummy_sensor_tile=b"9",
+    "Vendor_or_Thickness"
+    / Switch(
+        lambda ctx: ctx.FE_chip_version,
+        {"RD53A": Bytes(1), "No_chip": Bytes(1)},
+        default=EnumStr(
+            Bytes(1),
+            Advacam=b"0",
+            Leonardo=b"1",
+            IZM=b"2",
+            HPK=b"3",
+            HPK_cern=b"4",
+            RAL=b"5",
+            Glasgow=b"6",
+            ITkInstitute=b"9",
+        ),
     ),
     "number" / Bytes(5),
 )

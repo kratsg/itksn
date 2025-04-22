@@ -55,6 +55,8 @@ fe_chip_version = EnumStr(
     ITkpix_v1=b"1",
     ITkpix_v1p1=b"2",
     ITkpix_v2=b"3",
+    ITkpix_v1p1_dupe=b"4",
+    ITkpix_v2_dupe=b"5",
     No_chip=b"9",
 )
 

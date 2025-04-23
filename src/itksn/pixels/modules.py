@@ -3,7 +3,6 @@ from __future__ import annotations
 from construct import (
     Bytes,
     Computed,
-    GreedyBytes,
     Pass,
     Struct,
     Switch,
@@ -171,7 +170,8 @@ module = Struct(
     / Switch(
         lambda ctx: ctx.FE_chip_version, {"RD53A": pcb_manufacturer}, default=Pass
     ),
-    "number" / GreedyBytes,
+    "number"
+    / Switch(lambda ctx: ctx.FE_chip_version, {"RD53A": Bytes(5)}, default=Bytes(6)),
 )
 triplet_module = Struct(
     "FE_chip_version" / fe_chip_version,

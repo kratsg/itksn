@@ -54,9 +54,9 @@ fe_chip_version = EnumStr(
     RD53A=b"0",
     ITkpix_v1=b"1",
     ITkpix_v1p1=b"2",
-    ITkpix_v2_preprod_prod=b"3",
-    ITkpix_v2_prod=b"4",
-    ITkpix_v2_dupe=b"5",
+    ITkpix_v2_preprod_prod=b"3",  # 3 is both v1.1 and v2 BOM, but only V2 chips, pre-prod + japanese production + some french production modules
+    ITkpix_v2_prod=b"4",  # production
+    ITkpix_v2_dupe=b"5",  # production, with a flex duplicated last 6 digits with an already-used flex
     No_chip=b"9",
 )
 

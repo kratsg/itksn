@@ -6,11 +6,11 @@ authors:
   given-names: "Giordon"
   orcid: "https://orcid.org/0000-0001-6616-3433"
   affiliation: "SCIPP, University of California, Santa Cruz"
-title: "itksn: v0.4.1"
-version: 0.4.1
+title: "itksn: v0.4.2"
+version: 0.4.2
 doi: 10.5281/zenodo.7644145
-repository-code: "https://github.com/kratsg/itksn/releases/tag/v0.4.1"
-url: "https://kratsg.github.io/itksn/0.4.1/"
+repository-code: "https://github.com/kratsg/itksn/releases/tag/v0.4.2"
+url: "https://kratsg.github.io/itksn/0.4.2/"
 keywords:
   - python
   - physics

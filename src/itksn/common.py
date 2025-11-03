@@ -94,3 +94,9 @@ class EnumStr(TheAdapter):
         name = f"enum_{ksy.allocateId()}"
         ksy.enums[name] = self.ksymapping
         return name
+
+    def _emitfulltype(self, ksy, bitwise):  # type: ignore[no-untyped-def]
+        return self.subcon._compilefulltype(ksy, bitwise)  # type: ignore[attr-defined]  # pylint: disable=protected-access
+
+    def _emitseq(self, ksy, bitwise):  # type: ignore[no-untyped-def]
+        return self.subcon._compileseq(ksy, bitwise)  # type: ignore[attr-defined]  # pylint: disable=protected-access

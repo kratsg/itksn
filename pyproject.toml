@@ -213,5 +213,4 @@ messages_control.disable = [
   "line-too-long",
   "missing-module-docstring",
   "wrong-import-position",
-  "protected-access",
 ]

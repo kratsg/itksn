@@ -65,7 +65,7 @@ SerialNumberStruct = "SerialNumber" / Struct(
         default=PaddedString(2, "utf8"),
     ),
     "component_code"
-    / Computed(lambda ctx: re.sub(r"(\d)p(\d)", r"\1.\2", ctx._component_code)),  # type: ignore[arg-type,return-value]
+    / Computed(lambda ctx: re.sub(r"(\d)p(\d)", r"\1.\2", ctx._component_code)),  # type: ignore[arg-type,return-value]  # pylint: disable=protected-access
     "identifier"
     / Switch(
         this.subproject_code,

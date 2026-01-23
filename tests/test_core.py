@@ -150,7 +150,7 @@ def test_parse_digital_quad_module_rd53a():
     ("serial_number", "component_code", "assembly_site", "number"),
     [
         ("20UPIMS2002140", "Triplet_L0_stave_module", "Genova", b"2140"),
-        ("20UPIM52002140", "Triplet_L0_Ring0p5_module", "Genova", b"2140"),
+        ("20UPIM52002140", "Triplet_L0_Ring0.5_module", "Genova", b"2140"),
         ("20UPIM02202123", "Triplet_L0_Ring0_module", "Oslo", b"2123"),
         ("20UPIMS2102148", "Triplet_L0_stave_module", "Barcelona", b"2148"),
     ],

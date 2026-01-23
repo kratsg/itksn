@@ -1,10 +1,7 @@
 from __future__ import annotations
 
-import re
-
 from construct import (
     Bytes,
-    Computed,
     PaddedString,
     Struct,
     Switch,
@@ -53,7 +50,7 @@ SerialNumberStruct = "SerialNumber" / Struct(
             ),
         },
     ),
-    "_component_code"
+    "component_code"
     / Switch(
         this.subproject_code,
         {
@@ -64,8 +61,6 @@ SerialNumberStruct = "SerialNumber" / Struct(
         },
         default=PaddedString(2, "utf8"),
     ),
-    "component_code"
-    / Computed(lambda ctx: re.sub(r"(\d)p(\d)", r"\1.\2", ctx._component_code)),  # type: ignore[arg-type,return-value]  # pylint: disable=protected-access
     "identifier"
     / Switch(
         this.subproject_code,

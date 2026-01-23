@@ -57,47 +57,58 @@ parsing, it will loudly complain (sometimes).
 ```
 $ itksn parse 20UPGMC2291234
 Container:
-    atlas_project = (enum) atlas_detector b'20'
-    system_code = (enum) phaseII_upgrade b'U'
-    project_code = (enum) pixel_general b'PG'
-    subproject_code = (enum) Module_carrier b'MC'
+    atlas_project = uEnumByteString.new(b'20', 'atlas_detector') (total 14)
+    system_code = uEnumByteString.new(b'U', 'phaseII_upgrade') (total 15)
+    project_code = uEnumByteString.new(b'P', 'pixel') (total 5)
+    subproject_code = uEnumByteString.new(b'G', 'pixel_general') (total 13)
+    component_code = uEnumByteString.new(b'MC', 'Module_carrier') (total 14)
     identifier = Container:
-        module_type = (enum) Linear_triplet_module_carrier b'2'
-        module_version = (enum) Quad_v2p1 b'2'
+        module_type = uEnumByteString.new(b'2', 'Linear_triplet_module_carrier') (total 29)
+        module_version = uEnumByteString.new(b'2', 'Quad_v2p1') (total 9)
         manufacturer = b'9' (total 1)
         number = b'1234' (total 4)
 
+
 $ itksn parse 20UPGR90012345
 Container:
-    atlas_project = (enum) atlas_detector b'20'
-    system_code = (enum) phaseII_upgrade b'U'
-    project_code = (enum) pixel_general b'PG'
-    subproject_code = (enum) Digital_quad_module b'R9'
+    atlas_project = uEnumByteString.new(b'20', 'atlas_detector') (total 14)
+    system_code = uEnumByteString.new(b'U', 'phaseII_upgrade') (total 15)
+    project_code = uEnumByteString.new(b'P', 'pixel') (total 5)
+    subproject_code = uEnumByteString.new(b'G', 'pixel_general') (total 13)
+    component_code = uEnumByteString.new(b'R9', 'Digital_quad_module') (total 19)
     identifier = Container:
-        FE_chip_version = (enum) RD53A b'0'
-        reserved = b'0' (total 1)
+        FE_chip_version = uEnumByteString.new(b'0', 'RD53A') (total 5)
+        PCB_manufacturer = uEnumByteString.new(b'0', 'Dummy') (total 5)
         number = b'12345' (total 5)
+
 
 $ itksn parse 20UPGPD0012345
 Container:
-    atlas_project = (enum) atlas_detector b'20'
-    system_code = (enum) phaseII_upgrade b'U'
-    project_code = (enum) pixel_general b'PG'
-    subproject_code = (enum) Dual_PCB b'PD'
+    atlas_project = uEnumByteString.new(b'20', 'atlas_detector') (total 14)
+    system_code = uEnumByteString.new(b'U', 'phaseII_upgrade') (total 15)
+    project_code = uEnumByteString.new(b'P', 'pixel') (total 5)
+    subproject_code = uEnumByteString.new(b'G', 'pixel_general') (total 13)
+    component_code = uEnumByteString.new(b'PD', 'Dual_PCB') (total 8)
     identifier = Container:
-        FE_chip_version = (enum) RD53A b'0'
-        reserved = b'0' (total 1)
+        FE_chip_version = uEnumByteString.new(b'0', 'RD53A') (total 5)
+        PCB_manufacturer = uEnumByteString.new(b'0', 'Dummy') (total 5)
         number = b'12345' (total 5)
+
 
 $ itksn parse 20UPGFW2123456
 Container:
-    atlas_project = (enum) atlas_detector b'20'
-    system_code = (enum) phaseII_upgrade b'U'
-    project_code = (enum) pixel_general b'PG'
-    subproject_code = (enum) FE_chip_wafer b'FW'
+    atlas_project = uEnumByteString.new(b'20', 'atlas_detector') (total 14)
+    system_code = uEnumByteString.new(b'U', 'phaseII_upgrade') (total 15)
+    project_code = uEnumByteString.new(b'P', 'pixel') (total 5)
+    subproject_code = uEnumByteString.new(b'G', 'pixel_general') (total 13)
+    component_code = uEnumByteString.new(b'FW', 'FE_chip_wafer') (total 13)
     identifier = Container:
-        batch_number = (enum) CROC b'2'
-        number = b'123456' (total 6)
+        number = b'2123456' (total 7)
+        batch_number = 0
+        batch = u'RD53A' (total 5)
+        wafer = 102
+        row = 12
+        column = 0
 ```
 
 If you want to, for example, build the serial number for a front-end chip hex,
@@ -110,12 +121,13 @@ number = str(0x20098).zfill(7).encode()
 obj = {
     "atlas_project": "atlas_detector",
     "system_code": "phaseII_upgrade",
-    "project_code": "pixel_general",
-    "subproject_code": "FE_chip",
+    "project_code": "pixel",
+    "subproject_code": "pixel_general",
+    "component_code": "FE_chip",
     "identifier": {"number": number},
 }
 
-itksn.core.SerialNumberStruct.build(obj)  # b'20UPGFC0131224'
+itksn.build(obj)  # b'20UPGFC0131224'
 ```
 
 or even from python, one can parse
@@ -132,9 +144,9 @@ assert results.identifier.PCB_manufacturer == "Dummy"
 or build
 
 ```python
-from itksn.core import SerialNumberStruct
+import itksn
 
-sn = SerialNumberStruct.build(
+sn = itksn.build(
     {
         "atlas_project": "atlas_detector",
         "system_code": "phaseII_upgrade",

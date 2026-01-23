@@ -10,4 +10,4 @@
 
 ## Contributors
 
-- Be Our First!
+- Lingxin Meng [:material-github:](https://github.com/lime86)

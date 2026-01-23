@@ -28,7 +28,7 @@ subproject_codes = {
 }
 
 identifiers = Switch(
-    lambda ctx: ctx._component_code,
+    lambda ctx: ctx._component_code,  # pylint: disable=protected-access
     {
         "FE_chip_wafer": modules.fe_chip,
         "FE_chip": modules.fe_chip,

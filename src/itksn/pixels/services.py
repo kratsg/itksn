@@ -109,8 +109,9 @@ is_type0_cable = Struct(
     "stage"
     / EnumStr(
         Bytes(1),
-        Pre_production=b"0",
-        Production=b"1",
+        Prototype=b"0",
+        Pre_production=b"1",
+        Production=b"2",
         Dummy=b"9",
     ),
     "region"

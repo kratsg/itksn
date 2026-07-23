@@ -73,10 +73,3 @@ jobs:
       - uses: actions/upload-artifact@v7
         with:
           path: dist
-
-      - uses: pypa/gh-action-pypi-publish@v1.14.1
-        if: github.event_name == 'release' && github.event.action == 'published'
-        with:
-          user: __token__
-          # Remember to generate this and set it in "GitHub Secrets"
-          password: ${{ secrets.pypi_password }}

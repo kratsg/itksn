@@ -41,11 +41,11 @@ batch_number = {
 
 fe_chip = Struct(
     "number" / Bytes(7),
-    "batch_number" / Computed(lambda ctx: (int(ctx.number) & 0xF0000) >> 16),  # type: ignore[arg-type,return-value]
-    "batch" / Computed(lambda ctx: batch_number[ctx.batch_number]),  # type: ignore[arg-type,return-value]
-    "wafer" / Computed(lambda ctx: (int(ctx.number) & 0x0FF00) >> 8),  # type: ignore[arg-type,return-value]
-    "row" / Computed(lambda ctx: (int(ctx.number) & 0x000F0) >> 4),  # type: ignore[arg-type,return-value]
-    "column" / Computed(lambda ctx: (int(ctx.number) & 0x0000F) >> 0),  # type: ignore[arg-type,return-value]
+    "batch_number" / Computed(lambda ctx: (int(ctx.number) & 0xF0000) >> 16),
+    "batch" / Computed(lambda ctx: batch_number[ctx.batch_number]),
+    "wafer" / Computed(lambda ctx: (int(ctx.number) & 0x0FF00) >> 8),
+    "row" / Computed(lambda ctx: (int(ctx.number) & 0x000F0) >> 4),
+    "column" / Computed(lambda ctx: (int(ctx.number) & 0x0000F) >> 0),
 )
 
 fe_chip_version = EnumStr(
